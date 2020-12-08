@@ -1,13 +1,13 @@
-package com.ludmylla.personal.account.api;
+package com.ludmylla.personal.bill;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class PersonalAccountApplication {
+public class PersonalBillApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(PersonalAccountApplication.class, args);
+		SpringApplication.run(PersonalBillApplication.class, args);
 	}
 
 }
