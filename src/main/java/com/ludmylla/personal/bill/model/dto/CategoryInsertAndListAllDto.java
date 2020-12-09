@@ -1,6 +1,6 @@
 package com.ludmylla.personal.bill.model.dto;
 
-public class CategoryInsertDto {
+public class CategoryInsertAndListAllDto {
 
 	private String name;
 

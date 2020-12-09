@@ -17,8 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ludmylla.personal.bill.mapper.CategoryMapper;
 import com.ludmylla.personal.bill.model.Category;
-import com.ludmylla.personal.bill.model.dto.CategoryInsertDto;
-import com.ludmylla.personal.bill.model.dto.CategoryListAllDto;
+import com.ludmylla.personal.bill.model.dto.CategoryInsertAndListAllDto;
 import com.ludmylla.personal.bill.model.dto.CategoryUpdateDto;
 import com.ludmylla.personal.bill.service.CategoryService;
 
@@ -29,9 +28,9 @@ public class CategoryResource {
 	private CategoryService categoryService;
 	
 	@PostMapping(path = "/categories")
-	public ResponseEntity<String> createCategory(@Valid @RequestBody CategoryInsertDto categoryInsertDto){
+	public ResponseEntity<String> createCategory(@Valid @RequestBody CategoryInsertAndListAllDto categoryInsertAndListAllDto){
 		try {
-			Category category = CategoryMapper.INSTANCE.toCategoryInsertDto(categoryInsertDto);
+			Category category = CategoryMapper.INSTANCE.toCategoryInsertAndListAllDto(categoryInsertAndListAllDto);
 			
 			categoryService.save(category);
 			
@@ -47,16 +46,16 @@ public class CategoryResource {
 	}
 	
 	@GetMapping(path = "/categories")
-	public ResponseEntity<List<CategoryListAllDto>> listAll(){
+	public ResponseEntity<List<CategoryInsertAndListAllDto>> listAll(){
 		try {
 			List<Category> categories = categoryService.listAll();
 			
-			List<CategoryListAllDto> categoryListAllDto = CategoryMapper.INSTANCE
-					.dtoCategoryListAllDto(categories);
+			List<CategoryInsertAndListAllDto> categoryInsertAndListAllDto = CategoryMapper.INSTANCE
+					.dtoCategoryInsertAndListAll(categories);
 			
-			return new ResponseEntity<List<CategoryListAllDto>>(categoryListAllDto,HttpStatus.OK);
+			return new ResponseEntity<List<CategoryInsertAndListAllDto>>(categoryInsertAndListAllDto,HttpStatus.OK);
 		}catch (Exception e) {
-			return new ResponseEntity<List<CategoryListAllDto>>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<List<CategoryInsertAndListAllDto>>(HttpStatus.BAD_REQUEST);
 		}
 	}
 	

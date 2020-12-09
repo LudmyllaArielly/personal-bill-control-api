@@ -1,6 +1,5 @@
 package com.ludmylla.personal.bill.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,9 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ludmylla.personal.bill.model.Category;
 import com.ludmylla.personal.bill.repository.CategoryRepository;
 import com.ludmylla.personal.bill.useful.Useful;
-
-
-
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -33,9 +29,7 @@ public class CategoryServiceImpl implements CategoryService {
 	@Transactional
 	@Override
 	public List<Category> listAll() {
-		List<Category> categories = new ArrayList<>();
 		List<Category> list = categoryRepository.findAll();
-		list.forEach(categories::add);
 		return list;
 	}
 	
