@@ -1,4 +1,4 @@
-package com.ludmylla.personal.account.api;
+package com.ludmylla.personal.bill;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
