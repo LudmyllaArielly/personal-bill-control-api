@@ -8,4 +8,5 @@ public class Useful {
 		}
 		return compare;
 	}
+
 }
