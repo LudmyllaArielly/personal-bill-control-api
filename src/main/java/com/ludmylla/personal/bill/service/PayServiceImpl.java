@@ -67,23 +67,17 @@ public class PayServiceImpl implements PayService {
 	}
 	
 	private void validIfDescriptionIsBlank(Pay pay) {
-		boolean isDescriptionBlank = pay.getDescription().isBlank();
-		if(isDescriptionBlank) {
-			throw new IllegalArgumentException("Payment cannot be empty.");
-		}
+		Useful.validIfAttributesAreBlank(pay.getDescription());
 	}
 	
 	private void validIfDescriptionIsNull(Pay pay) {
-		boolean isDescriptionNull = pay.getDescription() == null;
-		if(isDescriptionNull) {
-			throw new IllegalArgumentException("Payment cannot be null.");
-		}
+		Useful.validIfAttributesIsNull(pay.getDescription());
 	}
-	
+
 	private void validIfPaymentsExist(Long id) {
 		Optional<Pay> pay = payRespository.findById(id);
-		boolean isPaymentsExist = pay.isEmpty();
-		if(isPaymentsExist) {
+		boolean isPaymentExist = pay.isEmpty();
+		if(isPaymentExist) {
 			throw new IllegalArgumentException("Payment does not exist.");
 		}
 	}
