@@ -14,10 +14,13 @@ import com.ludmylla.personal.bill.useful.Useful;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
-	
+
 	@Autowired
 	private CategoryRepository categoryRepository;
-	
+
+	@Autowired
+	private UserService userService;
+
 	@Transactional
 	@Override
 	public Long save(Category category) {
@@ -32,50 +35,62 @@ public class CategoryServiceImpl implements CategoryService {
 		List<Category> list = categoryRepository.findAll();
 		return list;
 	}
-	
+
 	@Modifying
 	@Transactional
 	@Override
 	public Long update(Category category) {
-		validIfCategoryExits(category.getId());
+		validationsIfCategoryExits(category.getId());
 		validations(category);
 		Category categoryUpdate = categoryRepository.save(category);
 		return categoryUpdate.getId();
 	}
-	
+
 	@Transactional
 	@Override
 	public void delete(Long id) {
-		validIfCategoryExits(id);
+		validationsIfCategoryExits(id);
+		validationsDelete();
 		Optional<Category> category = categoryRepository.findById(id);
 		Category categories = category.get();
 		categoryRepository.delete(categories);
 	}
-	
+
 	private void validations(Category category) {
 		validIfCategoryNameIsNull(category);
 		validIfCategoryNameIsBlank(category);
 		validTheQuantityOfLettersInCategory(category);
 		validIfTheNameHasNumbersOrSpecialCharacters(category);
+		validIfTokenIsNull();
+		validUserAccess();
 	}
 	
+	private void validationsDelete() {
+		validIfTokenIsNull();
+		validUserAccess();
+	}
+	
+	private void validationsIfCategoryExits(Long id) {
+		validIfCategoryExits(id);
+	}
+
 	private void validIfCategoryNameIsNull(Category category) {
-		boolean isNameNull = category.getName() ==  null;
-		if(isNameNull) {
+		boolean isNameNull = category.getName() == null;
+		if (isNameNull) {
 			throw new IllegalArgumentException("Category name cannot be null!");
 		}
 	}
-	
+
 	private void validIfCategoryNameIsBlank(Category category) {
 		boolean isNameBlank = category.getName().isBlank();
-		if(isNameBlank) {
+		if (isNameBlank) {
 			throw new IllegalArgumentException("The category name cannot be empty!");
 		}
 	}
-	
-	private void validTheQuantityOfLettersInCategory (Category category) {
+
+	private void validTheQuantityOfLettersInCategory(Category category) {
 		String isNameMinAndMax = category.getName();
-		if(isNameMinAndMax.length() < 3 || isNameMinAndMax.length() > 50) {
+		if (isNameMinAndMax.length() < 3 || isNameMinAndMax.length() > 50) {
 			throw new IllegalArgumentException("Category must have a minimum of 3 letters and a maximum of 50!");
 		}
 	}
@@ -83,13 +98,22 @@ public class CategoryServiceImpl implements CategoryService {
 	private void validIfCategoryExits(Long id) {
 		Optional<Category> category = categoryRepository.findById(id);
 		boolean isCategoryExists = category.isEmpty();
-		if(isCategoryExists) {
+		if (isCategoryExists) {
 			throw new IllegalArgumentException("Category does not exist!");
 		}
 	}
-	
+
 	private void validIfTheNameHasNumbersOrSpecialCharacters(Category category) {
 		String hasNumbersOrSpecialCharactersInName = category.getName();
 		Useful.validIfItHasNumbersOrSpecialCharacters(hasNumbersOrSpecialCharactersInName);
-	}	
+	}
+	
+	private void validIfTokenIsNull() {
+		userService.validIfTokenIsNull();
+	}
+	
+	private void validUserAccess() {
+		userService.releasesAuthorizationForTheUser();
+	}
+
 }
