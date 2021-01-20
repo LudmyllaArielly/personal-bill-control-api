@@ -12,7 +12,6 @@ import com.ludmylla.personal.bill.model.UserAuthorize;
 @Transactional
 public interface UserAuthorizeRepository  extends JpaRepository<UserAuthorize, Long>{
 	
-	
-	@Query("select u from UserAuthorize u where u.email = ?1")
+	@Query("select u from UserAuthorize u where lower(u.email) = lower(?1)")
 	UserAuthorize findEmailByUser(String email);
 }

@@ -13,12 +13,12 @@ public interface UserService {
 	
 	UserSearchDto search(UserSearchDto userSearchDto);
 
-	void validIfTokenIsNull();
-	
 	String  takesTheRoleOfTheuser();
 	 
 	String takesTheEmailOfTheuser();
-	 
+	
+	void validIfTokenIsNull();
+	
 	void releasesAuthorizationForTheUser();
 
 }

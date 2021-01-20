@@ -7,5 +7,5 @@ public interface UserAuthorizeService {
 	Long save();
 	
 	UserAuthorize findEmailByUser(String email);
-
+	
 }

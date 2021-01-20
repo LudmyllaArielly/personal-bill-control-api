@@ -8,7 +8,7 @@ import javax.persistence.ElementCollection;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
-import com.ludmylla.personal.bill.model.Roles;
+import com.ludmylla.personal.bill.model.enums.Roles;
 
 public class UserCreateDto implements Serializable {
 

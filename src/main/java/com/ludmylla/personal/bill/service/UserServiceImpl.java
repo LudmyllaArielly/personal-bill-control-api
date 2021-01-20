@@ -22,6 +22,9 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private UserAuthorizeService userAuthorizeService;
+	
+	
+	private RestTemplate restTemplate = new RestTemplate();
 
 	@Value("${com.user.api}")
 	private String basePath;
@@ -35,20 +38,23 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserCreateDto create(UserCreateDto userCreateDto) {
 		validationsUser(userCreateDto);
-		userEmail = userCreateDto.getEmail();
-		userRole = userCreateDto.getRoles().toString();
-		savesEmailAndUserRole();
-		RestTemplate restTemplate = new RestTemplate();
+		getUserDataToSave(userCreateDto);
 		String uri = basePath + "/user";
 		ResponseEntity<UserCreateDto> request = restTemplate.postForEntity(uri, userCreateDto, UserCreateDto.class);
 		UserCreateDto response = request.getBody();
 		return response;
 	}
 	
+	private void getUserDataToSave(UserCreateDto userCreateDto) {
+		userEmail = userCreateDto.getEmail();
+		userRole = userCreateDto.getRoles().toString();
+		savesEmailAndUserRole();
+	}
+	
 	private void savesEmailAndUserRole() {
 		userAuthorizeService.save();
 	}
-
+	// usado pelo userAuthorization
 	public String takesTheRoleOfTheuser() {
 		String roleReceived = userRole;
 		return roleReceived;
@@ -61,10 +67,10 @@ public class UserServiceImpl implements UserService {
 	
 	public void releasesAuthorizationForTheUser() {
 		String emailReceived = userEmailLogin;
-		UserAuthorize emailResponse = userAuthorizeService.findEmailByUser(emailReceived);
+		UserAuthorize findEmail = userAuthorizeService.findEmailByUser(emailReceived);
 		
-		if(emailResponse != null) {
-			if(emailResponse.getRole().equalsIgnoreCase("[USER]")) {
+		if(findEmail != null) { 
+			if(findEmail.getRole().equalsIgnoreCase("[USER]")) {
 				throw new IllegalArgumentException("User not allowed!");
 			}
 		}else {
@@ -100,7 +106,7 @@ public class UserServiceImpl implements UserService {
 	public UserSearchDto search(UserSearchDto userSearchDto) {
 		validIfTokenIsNull();
 		String insertToken = receivedToken.getToken();
-		RestTemplate restTemplate = new RestTemplate();
+	
 		String uri = basePath + "/user";
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Authorization", "Bearer " + insertToken);
