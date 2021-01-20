@@ -27,6 +27,7 @@ public class CategoryResource {
 	@Autowired
 	private CategoryService categoryService;
 	
+
 	@PostMapping(path = "/categories")
 	public ResponseEntity<String> createCategory(@Valid @RequestBody CategoryInsertAndListAllDto categoryInsertAndListAllDto){
 		try {

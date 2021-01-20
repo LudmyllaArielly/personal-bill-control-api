@@ -18,6 +18,9 @@ public class PayServiceImpl implements PayService {
 	@Autowired
 	private PayRespository payRespository;
 	
+	@Autowired
+	private UserService userService;
+	
 	@Transactional
 	@Override
 	public Long save(Pay pay) {
@@ -53,6 +56,7 @@ public class PayServiceImpl implements PayService {
 	@Transactional
 	@Override
 	public void delete(Long id) {
+		validations();
 		validIfPaymentsExist(id);
 		Optional<Pay> pay = payRespository.findById(id);
 		Pay payments = pay.get();
@@ -64,6 +68,13 @@ public class PayServiceImpl implements PayService {
 		validIfDescriptionIsBlank(pay);
 		validTheMinAndMaxOfCharactersInPayments(pay);
 		validIfTheDescriptionHasNumbersOrSpecialCharacters(pay);
+		validIfTokenIsNull();
+		validUserAccess();
+	}
+	
+	private void validations() {
+		validIfTokenIsNull();
+		validUserAccess();
 	}
 	
 	private void validIfDescriptionIsBlank(Pay pay) {
@@ -93,4 +104,13 @@ public class PayServiceImpl implements PayService {
 		String hasNumbersOrSpecialCharactersInDescription = pay.getDescription();
 		Useful.validIfItHasNumbersOrSpecialCharacters(hasNumbersOrSpecialCharactersInDescription);
 	}
+	
+	private void validIfTokenIsNull() {
+		userService.validIfTokenIsNull();
+	}
+	
+	private void validUserAccess() {
+		userService.releasesAuthorizationForTheUser();
+	}
+
 }
