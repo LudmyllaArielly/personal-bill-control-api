@@ -26,13 +26,13 @@ public class SolicitationServiceImpl implements SolicitationService {
 	private UserService userService;
 	
 	@Value("${com.zoneid}")
-	private ZoneId zoneId;
+	private String zoneId;
 
 	@Override
 	public Long save(Solicitation solicitation) {
 		validations(solicitation);
 		solicitation.setStatus(Status.OPEN);
-		solicitation.setSolicitationDate(ZonedDateTime.now(zoneId));
+		solicitation.setSolicitationDate(ZonedDateTime.now(ZoneId.of(zoneId)));
 		solicitation.setUsername(userService.takesTheEmailOfTheUserLogin());
 		Solicitation solicitationSave = solicitationRepository.save(solicitation);
 		return solicitationSave.getId();
