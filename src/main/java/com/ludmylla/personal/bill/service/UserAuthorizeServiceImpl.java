@@ -25,8 +25,8 @@ public class UserAuthorizeServiceImpl implements UserAuthorizeService {
 	}
 	
 	private void receivesEmailAndUserRoles(UserAuthorize userAuthorize) {
-		String user = userService.takesTheEmailOfTheuser();
-		String role = userService.takesTheRoleOfTheuser();
+		String user = userService.takesTheEmailOfTheUser();
+		String role = userService.takesTheRoleOfTheUser();
 		userAuthorize.setEmail(user);
 		userAuthorize.setRole(role);
 	}

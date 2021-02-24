@@ -13,9 +13,11 @@ public interface UserService {
 	
 	UserSearchDto search(UserSearchDto userSearchDto);
 
-	String  takesTheRoleOfTheuser();
+	String takesTheRoleOfTheUser();
 	 
-	String takesTheEmailOfTheuser();
+	String takesTheEmailOfTheUser();
+	
+	String takesTheEmailOfTheUserLogin();
 	
 	void validIfTokenIsNull();
 	

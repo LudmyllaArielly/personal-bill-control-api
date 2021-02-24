@@ -55,13 +55,18 @@ public class UserServiceImpl implements UserService {
 		userAuthorizeService.save();
 	}
 	// usado pelo userAuthorization
-	public String takesTheRoleOfTheuser() {
+	public String takesTheRoleOfTheUser() {
 		String roleReceived = userRole;
 		return roleReceived;
 	}
 
-	public String takesTheEmailOfTheuser() {
+	public String takesTheEmailOfTheUser() {
 		String emailReceived = userEmail;
+		return emailReceived;
+	}
+	
+	public String takesTheEmailOfTheUserLogin() {
+		String emailReceived = userEmailLogin;
 		return emailReceived;
 	}
 	
