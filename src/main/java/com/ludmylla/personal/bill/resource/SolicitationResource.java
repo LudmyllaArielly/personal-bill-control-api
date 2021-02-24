@@ -48,7 +48,7 @@ public class SolicitationResource {
 					.INSTANCE.dtoSolicitationListAllDto(solicitations);
 			return new ResponseEntity<List<SolicitationListAllDto>>(solicitationListAllDtos,HttpStatus.OK);
 		} catch (Exception e) {
-			return new ResponseEntity<List<SolicitationListAllDto>>(HttpStatus.UNAUTHORIZED);
+			return new ResponseEntity<List<SolicitationListAllDto>>(HttpStatus.BAD_REQUEST);
 		}
 	}
 	

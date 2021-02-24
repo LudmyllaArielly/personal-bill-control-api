@@ -10,13 +10,13 @@ import com.ludmylla.personal.bill.model.Category;
 import com.ludmylla.personal.bill.model.dto.CategoryInsertAndListAllDto;
 import com.ludmylla.personal.bill.model.dto.CategoryUpdateDto;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface CategoryMapper {
 
 	CategoryMapper INSTANCE = Mappers.getMapper(CategoryMapper.class);
 
 	@Mapping(target = "id", ignore = true)
-	Category toCategoryInsertAndListAllDto(CategoryInsertAndListAllDto source);
+	Category toCategoryInsertAndListAllDto(CategoryInsertAndListAllDto categoryInsertAndListAllDto);
 
 	Category toCategoryUpdateDto(CategoryUpdateDto source);
 	

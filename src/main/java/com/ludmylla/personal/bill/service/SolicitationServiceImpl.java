@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,12 +24,15 @@ public class SolicitationServiceImpl implements SolicitationService {
 
 	@Autowired
 	private UserService userService;
+	
+	@Value("${com.zoneid}")
+	private ZoneId zoneId;
 
 	@Override
 	public Long save(Solicitation solicitation) {
 		validations(solicitation);
 		solicitation.setStatus(Status.OPEN);
-		solicitation.setSolicitationDate(ZonedDateTime.now(ZoneId.of("America/Sao_Paulo")));
+		solicitation.setSolicitationDate(ZonedDateTime.now(zoneId));
 		solicitation.setUsername(userService.takesTheEmailOfTheUserLogin());
 		Solicitation solicitationSave = solicitationRepository.save(solicitation);
 		return solicitationSave.getId();
