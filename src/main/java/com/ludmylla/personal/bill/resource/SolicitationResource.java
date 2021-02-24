@@ -29,7 +29,7 @@ public class SolicitationResource {
 	private SolicitationService solicitationService;
 	
 	@PostMapping
-	public ResponseEntity<String> createSolicitation(@RequestBody SolicitationInsertDto solicitationInsertDto){
+	public ResponseEntity<String> saveSolicitation(@RequestBody SolicitationInsertDto solicitationInsertDto){
 		try {
 			Solicitation solicitation = SolicitationMapper.INSTANCE.toSolicitationInsertDto(solicitationInsertDto);
 			solicitationService.save(solicitation);
