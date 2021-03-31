@@ -10,7 +10,7 @@ import com.ludmylla.personal.bill.model.Pay;
 import com.ludmylla.personal.bill.model.dto.PayInsertAndListAllDto;
 import com.ludmylla.personal.bill.model.dto.PayUpdateDto;
 
-@Mapper
+@Mapper(uses = {BillMapper.class})
 public interface PayMapper {
 	
 	PayMapper INSTANCE = Mappers.getMapper(PayMapper.class);

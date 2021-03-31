@@ -7,14 +7,16 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 
 @Entity
+@SequenceGenerator(name = "seq_pay", sequenceName = "seq_pay", initialValue = 1, allocationSize = 1)
 public class Pay implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(generator="seq_pay", strategy=GenerationType.SEQUENCE)
 	private Long id;
 
 	@Column(unique = true)

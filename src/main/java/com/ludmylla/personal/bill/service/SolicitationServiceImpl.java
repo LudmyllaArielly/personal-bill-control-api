@@ -119,7 +119,7 @@ public class SolicitationServiceImpl implements SolicitationService {
 	private void validIfStatusIsNull(Solicitation solicitation) {
 		boolean isStatusNull = solicitation.getStatus() == null;
 		if (isStatusNull) {
-			throw new IllegalArgumentException("Status cannot be null.");
+			throw new IllegalArgumentException("Status cannot be blank fields.");
 		}
 	}
 	

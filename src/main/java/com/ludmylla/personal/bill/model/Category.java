@@ -7,19 +7,21 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
+@SequenceGenerator(name = "seq_category", sequenceName = "seq_category", initialValue = 1, allocationSize = 1)
 public class Category implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(generator="seq_category", strategy=GenerationType.SEQUENCE)
 	private Long id;
-	
+
 	@NotNull(message = "Category cannot be null.")
 	@NotBlank(message = "Category cannot be blank.")
 	@Size(min = 3, max = 50, message = "Category must have a minimum of 3 letters and a maximum of 50.")

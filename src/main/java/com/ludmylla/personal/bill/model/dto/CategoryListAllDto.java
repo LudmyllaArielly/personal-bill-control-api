@@ -2,19 +2,10 @@ package com.ludmylla.personal.bill.model.dto;
 
 import java.io.Serializable;
 
-public class CategoryUpdateDto implements Serializable {
+public class CategoryListAllDto implements Serializable{
+
 	private static final long serialVersionUID = 1L;
-	
-	private Long id;
 	private String name;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public String getName() {
 		return name;
@@ -23,5 +14,7 @@ public class CategoryUpdateDto implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	
 
 }

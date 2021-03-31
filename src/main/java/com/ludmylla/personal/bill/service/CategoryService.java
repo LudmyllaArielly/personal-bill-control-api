@@ -13,4 +13,12 @@ public interface CategoryService {
 	Long update(Category category);
 	
 	void delete(Long id);
+
+	List<Category> findCategoryBill(List<Category> category);
+	 
+	Category findByName(String name);
+	
+	List<Category> mostUsedCategory();
+	 
+
 }

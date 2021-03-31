@@ -35,6 +35,24 @@ public class CategoryServiceImpl implements CategoryService {
 		List<Category> list = categoryRepository.findAll();
 		return list;
 	}
+	@Override
+	public Category findByName(String name) {
+		Category category = categoryRepository.findByName(name);
+		return category;
+	}
+	
+
+	@Transactional
+	@Override
+	public List<Category> findCategoryBill(List<Category> category) {
+		/*List<Category> list = new ArrayList<>();		
+		for (int i = 0; i < category.size(); i++) {
+			List<Category> categories = categoryRepository.findByName(category.get(i).getName());
+			list.addAll(categories);
+		}*/
+		return null;
+	}
+
 
 	@Modifying
 	@Transactional
@@ -114,6 +132,18 @@ public class CategoryServiceImpl implements CategoryService {
 	
 	private void validUserAccess() {
 		userService.releasesAuthorizationForTheUser();
+	}
+
+	@Override
+	public List<Category> mostUsedCategory() {
+		//List<Category> item = new ArrayList<Category>();
+		List<Category> list = categoryRepository.mostUsedCategory();
+		
+		for(int i=1; i<=list.size(); i++) {
+			System.out.println(i);
+		}
+		
+		return list;
 	}
 
 }
