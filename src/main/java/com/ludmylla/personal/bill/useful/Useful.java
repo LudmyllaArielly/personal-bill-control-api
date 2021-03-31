@@ -1,5 +1,8 @@
 package com.ludmylla.personal.bill.useful;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Useful {
 
 	public static String validIfItHasNumbersOrSpecialCharacters(String compare) {
@@ -23,4 +26,14 @@ public class Useful {
 		}
 	}
 
+	public static Double roundsValue(Double round) {
+		Double formattedRoundsValue = Math.round(round * 100.0) / 100.0;
+		return formattedRoundsValue;
+	}
+	
+	public static String formattDate (Date value) {
+		SimpleDateFormat formatt = new SimpleDateFormat("dd/MM/yyyy");
+		return formatt.format(value);
+	}
+	
 }
