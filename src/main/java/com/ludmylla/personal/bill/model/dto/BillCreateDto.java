@@ -3,18 +3,16 @@ package com.ludmylla.personal.bill.model.dto;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-
 import javax.persistence.OneToOne;
-
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.ludmylla.personal.bill.model.enums.AccountType;
 import com.ludmylla.personal.bill.model.enums.ValueType;
+import java.util.Date;
 
 public class BillCreateDto implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String description;
-
 	@JsonDeserialize(as = Date.class)
 	private Date purchaseDate;
 	private BigDecimal priceTotal;
@@ -101,6 +99,7 @@ public class BillCreateDto implements Serializable {
 
 	public void setPayInsertAndListAllDto(PayInsertAndListAllDto payInsertAndListAllDto) {
 		this.payInsertAndListAllDto = payInsertAndListAllDto;
+	
 	}
 
 }

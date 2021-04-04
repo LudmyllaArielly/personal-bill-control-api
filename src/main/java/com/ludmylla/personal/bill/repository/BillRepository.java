@@ -3,13 +3,12 @@ package com.ludmylla.personal.bill.repository;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
 import com.ludmylla.personal.bill.model.Bill;
 import com.ludmylla.personal.bill.model.enums.AccountType;
 import com.ludmylla.personal.bill.model.enums.ValueType;
@@ -40,4 +39,7 @@ public interface BillRepository extends JpaRepository<Bill, Long> {
 	@Query("select u from Bill u where u.purchaseDate between :dataStart and :dateEnd")
 	List<Bill> findBillByDate(@Param("dataStart") Date dateStart, @Param("dateEnd") Date dateEnd);
 		
+
+
+
 }

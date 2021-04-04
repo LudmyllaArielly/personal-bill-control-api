@@ -3,7 +3,6 @@ package com.ludmylla.personal.bill.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -41,7 +40,7 @@ public class PaymentInstallments implements Serializable {
 		this.installmentNumber = installmentNumber;
 		this.installmentDate = installmentDate;
 	}
-
+  
 	public Long getId() {
 		return id;
 	}
@@ -53,7 +52,6 @@ public class PaymentInstallments implements Serializable {
 	public BigDecimal getInstallmentPrice() {
 		return installmentPrice;
 	}
-
 	public void setInstallmentPrice(BigDecimal installmentPrice) {
 		this.installmentPrice = installmentPrice;
 	}

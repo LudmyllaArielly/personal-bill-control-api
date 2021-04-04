@@ -10,6 +10,7 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,10 +19,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.ludmylla.personal.bill.model.enums.AccountType;
@@ -35,11 +34,11 @@ public class Bill implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
 	private String username;
 	private String description;
 	private BigDecimal priceTotal;
 	private BigDecimal quantityPaymentInstallments;
-
 	private String justification;
 
 	@JsonFormat(pattern = "dd/MM/yyyy", shape = JsonFormat.Shape.STRING)
@@ -78,7 +77,6 @@ public class Bill implements Serializable {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-
 	public String getDescription() {
 		return description;
 	}
@@ -86,7 +84,7 @@ public class Bill implements Serializable {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
+  
 	public BigDecimal getPriceTotal() {
 		return priceTotal;
 	}
@@ -110,7 +108,7 @@ public class Bill implements Serializable {
 	public void setJustification(String justification) {
 		this.justification = justification;
 	}
-
+  
 	public Date getPurchaseDate() {
 		return purchaseDate;
 	}
@@ -133,6 +131,22 @@ public class Bill implements Serializable {
 
 	public void setValueType(ValueType valueType) {
 		this.valueType = valueType;
+	}
+
+	public Double getPriceTotal() {
+		return priceTotal;
+	}
+
+	public void setPriceTotal(Double priceTotal) {
+		this.priceTotal = priceTotal;
+	}
+
+	public Double getInstallmentsQuantity() {
+		return installmentsQuantity;
+	}
+
+	public void setInstallmentsQuantity(Double installmentsQuantity) {
+		this.installmentsQuantity = installmentsQuantity;
 	}
 
 	public List<PaymentInstallments> getPaymentInstallments() {
@@ -201,6 +215,5 @@ public class Bill implements Serializable {
 		return this.purchaseDate;
 		
 	}
-
 
 }

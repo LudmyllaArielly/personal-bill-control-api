@@ -1,5 +1,6 @@
 package com.ludmylla.personal.bill.service;
 
+
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -20,6 +21,15 @@ import com.ludmylla.personal.bill.model.enums.AccountType;
 import com.ludmylla.personal.bill.model.enums.ValueType;
 import com.ludmylla.personal.bill.repository.BillRepository;
 import com.ludmylla.personal.bill.useful.Useful;
+
+import java.util.Date;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.ludmylla.personal.bill.model.Bill;
+import com.ludmylla.personal.bill.model.PaymentInstallments;
+import com.ludmylla.personal.bill.repository.BillRepository;
+
 
 @Service
 public class BillServiceImpl implements BillService {
@@ -249,5 +259,5 @@ public class BillServiceImpl implements BillService {
 		bill = validIfTheReturnedDataBelongsToUser(bill);
 		return bill;
 	}
-	
+
 }
