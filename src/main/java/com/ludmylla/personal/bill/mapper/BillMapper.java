@@ -15,15 +15,16 @@ public interface BillMapper {
 
 	BillMapper INSTANCE = Mappers.getMapper(BillMapper.class);
 
-	@Mappings({
-			@Mapping(target = "id", ignore = true), 
+	@Mappings({ 
+			@Mapping(target = "id", ignore = true),
 			@Mapping(target = "username", ignore = true),
 			@Mapping(target = "paymentInstallments", ignore = true),
 			@Mapping(target = "category", source = "categoryCreateAndListAllDto"),
 			@Mapping(target = "pay", source = "payCreateAndListAllDto") })
 	Bill toBill(BillCreateDto source);
 
-	@Mappings({ @Mapping(target = "paymentInstallments", ignore = true), 
+	@Mappings({
+			@Mapping(target = "paymentInstallments", ignore = true), 
 			@Mapping(target = "username", ignore = true),
 			@Mapping(target = "category", source = "categoryCreateAndListAllDto"),
 			@Mapping(target = "pay", source = "payCreateAndListAllDto") })
@@ -34,12 +35,13 @@ public interface BillMapper {
 		@Mapping(target = "categoryCreateAndListAllDto", source = "category"),
 		@Mapping(target = "payCreateAndListAllDto", source = "pay")
 	})
-	BillListAllDto dtoBillListAllDto(Bill source);
+	BillListAllDto dtoBillListAllDto(Bill source); 
 
 	@Mappings({ 
 			@Mapping(target = "paymentInstallments", source = "paymentInstallmentCreateDtos"),
 			@Mapping(target = "category", source = "categoryCreateAndListAllDto"),
 			@Mapping(target = "pay", source = "payInsertAndListAllDto") })
 	List<BillListAllDto> dtoBillListAllDto(List<Bill> source);
+
 
 }

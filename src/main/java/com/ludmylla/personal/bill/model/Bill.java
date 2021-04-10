@@ -39,7 +39,6 @@ public class Bill implements Serializable {
 	private String description;
 	private BigDecimal priceTotal;
 	private BigDecimal quantityPaymentInstallments;
-
 	private String justification;
 
 	@DateTimeFormat(iso = ISO.DATE)
@@ -191,12 +190,10 @@ public class Bill implements Serializable {
 
 	@Override
 	public String toString() {
-
 		return "Bill [id=" + id + ", username=" + username + ", description=" + description + ", priceTotal="
 				+ priceTotal + ", quantityPaymentInstallments=" + quantityPaymentInstallments + ", justification="
 				+ justification + ", purchaseDate=" + purchaseDate + ", accountType=" + accountType + ", valueType="
 				+ valueType + ", paymentInstallments=" + paymentInstallments + ", category=" + category + ", pay=" + pay
 				+ "]";
 	}
-
 }

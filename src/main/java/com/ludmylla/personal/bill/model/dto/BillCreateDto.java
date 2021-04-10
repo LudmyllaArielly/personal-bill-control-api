@@ -3,7 +3,6 @@ package com.ludmylla.personal.bill.model.dto;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
-
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.ludmylla.personal.bill.model.enums.AccountType;
 import com.ludmylla.personal.bill.model.enums.ValueType;
@@ -96,7 +95,6 @@ public class BillCreateDto implements Serializable {
 
 	public void setPayCreateAndListAllDto(PayCreateAndListAllDto payCreateAndListAllDto) {
 		this.payCreateAndListAllDto = payCreateAndListAllDto;
-
 	}
 
 }

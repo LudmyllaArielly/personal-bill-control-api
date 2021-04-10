@@ -1,5 +1,4 @@
 package com.ludmylla.personal.bill.useful;
-
 import java.util.Date;
 
 public class Useful {
