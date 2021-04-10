@@ -12,7 +12,6 @@ public class BillCreateDto implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private String description;
-
 	@JsonDeserialize(as = Date.class)
 	private Date purchaseDate;
 	private BigDecimal priceTotal;
@@ -97,6 +96,7 @@ public class BillCreateDto implements Serializable {
 
 	public void setPayCreateAndListAllDto(PayCreateAndListAllDto payCreateAndListAllDto) {
 		this.payCreateAndListAllDto = payCreateAndListAllDto;
+
 	}
 
 }

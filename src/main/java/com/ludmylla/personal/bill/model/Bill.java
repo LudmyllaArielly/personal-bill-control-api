@@ -191,6 +191,7 @@ public class Bill implements Serializable {
 
 	@Override
 	public String toString() {
+
 		return "Bill [id=" + id + ", username=" + username + ", description=" + description + ", priceTotal="
 				+ priceTotal + ", quantityPaymentInstallments=" + quantityPaymentInstallments + ", justification="
 				+ justification + ", purchaseDate=" + purchaseDate + ", accountType=" + accountType + ", valueType="

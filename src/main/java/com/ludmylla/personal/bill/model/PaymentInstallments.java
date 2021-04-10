@@ -24,6 +24,7 @@ public class PaymentInstallments implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
 	private BigDecimal installmentPrice;
 	private Integer installmentNumber;
 
@@ -35,7 +36,7 @@ public class PaymentInstallments implements Serializable {
 	public PaymentInstallments() {
 	}
 
-	public PaymentInstallments( BigDecimal installmentPrice, Integer installmentNumber, Date installmentDate) {
+	public PaymentInstallments(BigDecimal installmentPrice, Integer installmentNumber, Date installmentDate) {
 		this.installmentPrice = installmentPrice;
 		this.installmentNumber = installmentNumber;
 		this.installmentDate = installmentDate;
@@ -69,8 +70,8 @@ public class PaymentInstallments implements Serializable {
 		return installmentDate;
 	}
 
-	public void setInstallmentDate(Date installmentDate) {
-		this.installmentDate = installmentDate;
+	public Date setInstallmentDate(Date installmentDate) {
+		return this.installmentDate = installmentDate;
 	}
 
 	@Override

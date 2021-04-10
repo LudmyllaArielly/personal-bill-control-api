@@ -135,7 +135,6 @@ public class BillResource {
 		} catch (Exception e) {
 			return new ResponseEntity<List<BillListAllDto>>(HttpStatus.BAD_REQUEST);
 		}
-		
 	}
 	
 	@DeleteMapping("/{id}")

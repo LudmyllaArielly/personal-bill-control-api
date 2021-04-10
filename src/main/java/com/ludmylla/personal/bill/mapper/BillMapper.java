@@ -1,12 +1,10 @@
 package com.ludmylla.personal.bill.mapper;
 
 import java.util.List;
-
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
-
 import com.ludmylla.personal.bill.model.Bill;
 import com.ludmylla.personal.bill.model.dto.BillCreateDto;
 import com.ludmylla.personal.bill.model.dto.BillListAllDto;
@@ -30,6 +28,7 @@ public interface BillMapper {
 			@Mapping(target = "category", source = "categoryCreateAndListAllDto"),
 			@Mapping(target = "pay", source = "payCreateAndListAllDto") })
 	Bill toBill(BillUpdateDto source);
+	
 	@Mappings({
 		@Mapping(target = "paymentInstallmentCreateDtos", source = "paymentInstallments"),
 		@Mapping(target = "categoryCreateAndListAllDto", source = "category"),
