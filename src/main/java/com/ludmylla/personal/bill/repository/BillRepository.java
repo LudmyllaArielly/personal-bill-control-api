@@ -24,7 +24,7 @@ public interface BillRepository extends JpaRepository<Bill, Long> {
 	@Query("select u from Bill u where lower(u.description) like concat('%',lower(:description),'%') "
 			+ "or lower(u.justification) like concat('%',lower(:justification),'%') "
 			+ "or lower(u.priceTotal) like concat('%',lower(:priceTotal),'%')")
-	List<Bill> findBillAttributes(@Param("description") String description, 
+	List<Bill> findBillByAttributes(@Param("description") String description, 
 								@Param("justification") String justification,
 								@Param("priceTotal") BigDecimal priceTotal);
 	
@@ -32,7 +32,6 @@ public interface BillRepository extends JpaRepository<Bill, Long> {
 			+ "or u.valueType = :valueType")
 	List<Bill> findByAccountTypeAndValueType(@Param("accountType") AccountType accountType,
 											@Param("valueType") ValueType valueType);
-
 	
 	@Query("select b from Bill b JOIN b.paymentInstallments p where p.installmentDate between :dataStart and :dateEnd")
 	List<Bill> findBillPaymentInstallmentByDate(@Param("dataStart") Date dateStart, @Param("dateEnd") Date dateEnd);

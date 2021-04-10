@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ludmylla.personal.bill.model.dto.UserCreateDto;
@@ -14,13 +15,14 @@ import com.ludmylla.personal.bill.model.dto.UserSearchDto;
 import com.ludmylla.personal.bill.service.UserService;
 
 @RestController
+@RequestMapping("/users")
 public class UserResource {
 	
 	@Autowired
 	private UserService userService;
 	
 	
-	@PostMapping(path = "/user")
+	@PostMapping
 	public ResponseEntity<String> createUser(@RequestBody UserCreateDto userCreateDto){
 		try {
 			 userService.create(userCreateDto);
@@ -30,7 +32,7 @@ public class UserResource {
 		}
 	}
 	
-	@PostMapping(path = "/user/login")
+	@PostMapping("/login")
 	public ResponseEntity<String> login(@RequestBody UserLoginDto userLoginDto) {
 		try {
 			userService.login(userLoginDto);
@@ -41,7 +43,7 @@ public class UserResource {
 		}
 	}
 	
-	@GetMapping(path = "/user")
+	@GetMapping
 	public ResponseEntity<String> searchUser(UserSearchDto userSearchDto){
 		try {
 			userService.search(userSearchDto);

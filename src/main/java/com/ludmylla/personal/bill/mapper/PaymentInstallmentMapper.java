@@ -15,7 +15,7 @@ public interface PaymentInstallmentMapper {
 	PaymentInstallmentMapper INSTANCE = Mappers.getMapper(PaymentInstallmentMapper.class);
 
 	@Mapping(target = "id", ignore = true)
-	PaymentInstallments toPaymentInstallmentCreateDto(PaymentInstallmentCreateDto source);
+	PaymentInstallments toPaymentInstallment(PaymentInstallmentCreateDto source);
 
 	PaymentInstallmentCreateDto dtoPaymentInstallmentCreateDto(PaymentInstallments source);
 

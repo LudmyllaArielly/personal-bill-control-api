@@ -23,7 +23,6 @@ public class PaymentInstallmentsServiceImpl implements PaymentInstallmentsServic
 	@Autowired
 	private PaymentInstallmentsRepository paymentInstallmentsRepository;
 
-	/* Método que recebe os dados da conta para realizar o calculo de parcelas */
 	@Override
 	public List<PaymentInstallments> paymentCalculation(Bill bill) {
 		GregorianCalendar calendar = new GregorianCalendar();
@@ -33,12 +32,10 @@ public class PaymentInstallmentsServiceImpl implements PaymentInstallmentsServic
 		BigDecimal getInstallmentPrice = bill.returnInstallmentPrice();
 		for(int i=1; i<=getquantity.doubleValue(); i++) {
 		
-			// Seta a data da conta
 			calendar.setTime(getPurchaseDate);
 
 			addsMonth(calendar, i);
 
-			// Devolve a data incrementada ou não
 			getPurchaseDate = calendar.getTime();
 			
 			PaymentInstallments	payment = new PaymentInstallments(getInstallmentPrice, i,getPurchaseDate);

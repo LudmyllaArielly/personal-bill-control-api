@@ -41,7 +41,7 @@ public class BillServiceImpl implements BillService {
 
 	@Override
 	public Long save(Bill bill) {
-		validations(bill);
+		validationsSave(bill);
 		bill.setUsername(userService.takesTheEmailOfTheUserLogin());
 		Bill billCreate = billRepository.save(bill);
 		return billCreate.getId();
@@ -57,165 +57,10 @@ public class BillServiceImpl implements BillService {
 	}
 
 	@Override
-	public List<Bill> findUserBill() {
+	public List<Bill> findsAllUserAccounts() {
 		validIfTokenIsNull();
 		List<Bill> bill = billRepository.findByName(userService.takesTheEmailOfTheUserLogin());
 		return bill;
-	}
-	
-	@Modifying
-	@Transactional
-	@Override
-	public void update(Bill bill) throws ParseException {
-		bill.setUsername(userService.takesTheEmailOfTheUserLogin());
-		validationsUpdate(bill);
-		billRepository.save(bill);
-	}
-
-	@Override
-	public void delete(Long id) {
-		validations(id);
-		Optional<Bill> billOptional = billRepository.findById(id);
-		Bill bill = billOptional.get();
-		deletesExistingInstallmentsInTheAccount(bill);
-		billRepository.delete(bill);
-	}
-
-	private void returnsAccountRelationship(Bill bill) {
-		thereIsInstallment(bill);
-		findBillPayment(bill);
-		findBillCategory(bill);
-	}
-
-	/*
-	 * Verifica se a quantidade de parcela é maior que zero, se sim existe
-	 * parcelamento se não é porque é a vista
-	 */
-	private void thereIsInstallment(Bill bill){
-		BigDecimal quantityIsGreaterThanZero = bill.getQuantityPaymentInstallments();
-		if (quantityIsGreaterThanZero.compareTo(BigDecimal.ZERO) > 0) {
-			List<PaymentInstallments> payment = paymentInstallmentsService.paymentCalculation(bill);
-			bill.setPaymentInstallments(payment);
-		}
-	}
-
-	private void findBillPayment(Bill bill) {
-		Pay pay = payService.findByDescription(bill.getPay().getDescription());
-		bill.setPay(pay);
-	}
-
-	private void findBillCategory(Bill bill) {
-		Category category = categoryService.findByName(bill.getCategory().getName());
-		bill.setCategory(category);
-	}
-	/* Método chamado pelo update para deletar as parcelas existente, deixando apenas as nova
-	 * parcelas geradas. Chamado também pelo delete após excluir a conta, exclui também 
-	 * as parcelas.
-	 * */
-	@Transactional
-	private void deletesExistingInstallmentsInTheAccount(Bill bill) {
-		Optional<Bill> billOptional = billRepository.findById(bill.getId());
-		bill = billOptional.get();
-		for (int i = 0; i < bill.getPaymentInstallments().size(); i++) {
-			paymentInstallmentsService.delete(billOptional.get().getPaymentInstallments().get(i).getId());
-		}
-	}
-
-	private void validationsUpdate(Bill bill) throws ParseException {
-		validIfTokenIsNull();
-		validIfBillExits(bill.getId());
-		validIfBillPriceTotalIsEqualsToZero(bill);
-		validIfAttributesOfBillIsNull(bill);
-		validIfAttributesOfBillAreBlank(bill);
-		validIfAttributesOfBillIsBlank(bill);
-		validIfAttributesOfBillContainsOrSpecialCharacters(bill);
-		deletesExistingInstallmentsInTheAccount(bill);
-		returnsAccountRelationship(bill);
-	}
-
-	private void validations(Bill bill){
-		validIfTokenIsNull();
-		validIfAttributesOfBillIsNull(bill);
-		validIfAttributesOfBillAreBlank(bill);
-		validIfAttributesOfBillContainsOrSpecialCharacters(bill);
-		returnsAccountRelationship(bill);
-	}
-
-	private void validationsTokenIsNullAndValidUserAccess() {
-		validIfTokenIsNull();
-		validUserAccess();
-	}
-
-	private void validations(Long id) {
-		validIfTokenIsNull();
-		validIfBillExits(id);
-	}
-
-	private void validIfTokenIsNull() {
-		userService.validIfTokenIsNull();
-	}
-
-	private void validUserAccess() {
-		userService.releasesAuthorizationForTheUser();
-	}
-
-	private void validIfBillExits(Long id) {
-		Optional<Bill> bill = billRepository.findById(id);
-		boolean isBillExist = bill.isEmpty();
-		if (isBillExist) {
-			throw new IllegalArgumentException("Bill does not exist.");
-		}
-	}
-
-	private void validIfAttributesOfBillIsNull(Bill bill) {
-		Useful.validIfAttributesIsNull(bill.getDescription());
-		Useful.validIfAttributesIsNullObject(bill.getCategory());
-		Useful.validIfAttributesIsNullObject(bill.getPay());
-		Useful.validIfAttributesIsNullDate(bill.getPurchaseDate());
-		Useful.validIfAttributesIsNullEnums(bill.getAccountType());
-		Useful.validIfAttributesIsNullEnums(bill.getValueType());
-	}
-
-	private void validIfAttributesOfBillAreBlank(Bill bill) {
-		Useful.validIfAttributesAreBlank(bill.getDescription());
-		Useful.validIfAttributesAreBlankDate(bill.getPurchaseDate());
-
-	}
-
-	private void validIfBillPriceTotalIsEqualsToZero(Bill bill) {
-		boolean isPriceTotalEqualsToZero = bill.getPriceTotal().compareTo(BigDecimal.ZERO) <= 0;
-		if (isPriceTotalEqualsToZero) {
-			throw new IllegalArgumentException("PriceTotal: cannot be zero!");
-		}
-	}
-
-	private void validIfAttributesOfBillIsBlank(Bill bill) {
-		boolean isCategoryBlank = bill.getCategory().getName().isBlank();
-		boolean isPayBlank = bill.getPay().getDescription().isBlank();
-		boolean isAccountTypeBlank = bill.getAccountType().toString().isBlank();
-		boolean isValueTypeBlank = bill.getValueType().toString().isBlank();
-		if (isPayBlank || isCategoryBlank || isAccountTypeBlank || isValueTypeBlank) {
-			throw new IllegalArgumentException("There are one or more nullfilds");
-		}
-	}
-	
-	private void validIfAttributesOfBillContainsOrSpecialCharacters(Bill bill) {
-		Useful.validIfItHasNumbersOrSpecialCharacters(bill.getDescription());
-	}
-	/*
-	 Verifica se a lista contém o parametro especificado e retorna e retorna
-	 os dados somente do usuário logado
-	 */
-	private List<Bill> validIfTheReturnedDataBelongsToUser(List<Bill> bill) {	
-		List<Bill> list = new ArrayList<Bill>();
-		for(int i=0; i<bill.size(); i++) {
-			String isUsername = bill.get(i).getUsername();
-			String isUsernameLogged = userService.takesTheEmailOfTheUserLogin();
-			if(isUsername.equalsIgnoreCase(isUsernameLogged)) {
-				list.add(bill.get(i));
-			}
-		}
-		return list;
 	}
 	
 	@Override
@@ -243,11 +88,176 @@ public class BillServiceImpl implements BillService {
 	}
 	
 	@Override
-	public List<Bill> findBillAttributes(String description, String justification,BigDecimal priceTotal) {
+	public List<Bill> findBillByAttributes(String description, String justification,BigDecimal priceTotal) {
 		validIfTokenIsNull();
-		List<Bill> bill = billRepository.findBillAttributes(description, justification, priceTotal);
+		List<Bill> bill = billRepository.findBillByAttributes(description, justification, priceTotal);
 		bill = validIfTheReturnedDataBelongsToUser(bill);
 		return bill;
 	}
 	
+	@Modifying
+	@Transactional
+	@Override
+	public void update(Bill bill) throws ParseException {
+		bill.setUsername(userService.takesTheEmailOfTheUserLogin());
+		validationsUpdate(bill);
+		billRepository.save(bill);
+	}
+
+	@Override
+	public void delete(Long id) {
+		validationsDelete(id);
+		Optional<Bill> billOptional = billRepository.findById(id);
+		Bill bill = billOptional.get();
+		deletesExistingInstallmentsInTheAccount(bill);
+		billRepository.delete(bill);
+	}
+	
+	private void validationsSave(Bill bill){
+		validIfTokenIsNull();
+		validIfAttributesOfBillIsNull(bill);
+		validIfCategoryAndPayOfBillIsNull(bill);
+		validIfPriceTotalAndQuantityOfBillIsNull(bill);
+		validIfAttributesOfBillAreBlank(bill);
+		validIfCategoryAndPayOfBillIsBlank(bill);
+		validIfBillPriceTotalIsEqualsToZero(bill);
+		validIfAttributesOfBillContainsOrSpecialCharacters(bill);
+		returnsAccountRelationship(bill);
+	}
+	
+	private void validationsUpdate(Bill bill) throws ParseException {
+		validIfTokenIsNull();
+		validIfBillExits(bill.getId());
+		validIfAttributesOfBillIsNull(bill);
+		validIfCategoryAndPayOfBillIsNull(bill);
+		validIfPriceTotalAndQuantityOfBillIsNull(bill);
+		validIfAttributesOfBillAreBlank(bill);
+		validIfBillPriceTotalIsEqualsToZero(bill);
+		validIfCategoryAndPayOfBillIsBlank(bill);
+		validIfAttributesOfBillContainsOrSpecialCharacters(bill);
+		deletesExistingInstallmentsInTheAccount(bill);
+		returnsAccountRelationship(bill);
+	}
+	
+	private void validationsDelete(Long id) {
+		validIfTokenIsNull();
+		validIfBillExits(id);
+	}
+	
+	private void validationsTokenIsNullAndValidUserAccess() {
+		validIfTokenIsNull();
+		validUserAccess();
+	}
+
+	private void returnsAccountRelationship(Bill bill) {
+		thereIsInstallment(bill);
+		findBillPayment(bill);
+		findBillCategory(bill);
+	}
+
+	private void thereIsInstallment(Bill bill){
+		BigDecimal quantityIsGreaterThanZero = bill.getQuantityPaymentInstallments();
+		if (quantityIsGreaterThanZero.compareTo(BigDecimal.ZERO) > 0) {
+			List<PaymentInstallments> payment = paymentInstallmentsService.paymentCalculation(bill);
+			bill.setPaymentInstallments(payment);
+		}
+	}
+
+	private void findBillPayment(Bill bill) {
+		Pay pay = payService.findByDescription(bill.getPay().getDescription());
+		payService.validIfPayIsNull(pay);
+		bill.setPay(pay);
+	}
+	
+	private void findBillCategory(Bill bill) {
+		Category category = categoryService.findByName(bill.getCategory().getName());
+		categoryService.validIfCategoryIsNull(category);
+		bill.setCategory(category);
+	}
+		
+	@Transactional
+	private void deletesExistingInstallmentsInTheAccount(Bill bill) {
+		Optional<Bill> billOptional = billRepository.findById(bill.getId());
+		bill = billOptional.get();
+		for (int i = 0; i < bill.getPaymentInstallments().size(); i++) {
+			paymentInstallmentsService.delete(billOptional.get().getPaymentInstallments().get(i).getId());
+		}
+	}
+	
+	private void validIfTokenIsNull() {
+		userService.validIfTokenIsNull();
+	}
+
+	private void validUserAccess() {
+		userService.releasesAuthorizationForTheUser();
+	}
+
+	private void validIfBillExits(Long id) {
+		Optional<Bill> bill = billRepository.findById(id);
+		boolean isBillExist = bill.isEmpty();
+		if (isBillExist) {
+			throw new IllegalArgumentException("Bill does not exist.");
+		}
+	}
+
+	private void validIfAttributesOfBillIsNull(Bill bill) {
+		Useful.validIfAttributesIsNull(bill.getDescription());
+		Useful.validIfAttributesIsNullDate(bill.getPurchaseDate());
+		Useful.validIfAttributesIsNullEnums(bill.getAccountType());
+		Useful.validIfAttributesIsNullEnums(bill.getValueType());
+	}
+
+	private void validIfAttributesOfBillAreBlank(Bill bill) {
+		Useful.validIfAttributesAreBlank(bill.getDescription());
+		Useful.validIfAttributesAreBlankDate(bill.getPurchaseDate());
+
+	}
+
+	private void validIfBillPriceTotalIsEqualsToZero(Bill bill) {
+		boolean isPriceTotalEqualsToZero = bill.getPriceTotal().compareTo(BigDecimal.ZERO) <= 0;
+		if (isPriceTotalEqualsToZero) {
+			throw new IllegalArgumentException("PriceTotal: cannot be zero!");
+		}
+	}
+
+	private void validIfCategoryAndPayOfBillIsBlank(Bill bill) {
+		boolean isCategoryBlank = bill.getCategory().getName().isBlank();
+		boolean isPayBlank = bill.getPay().getDescription().isBlank();
+		if (isPayBlank || isCategoryBlank) {
+			throw new IllegalArgumentException("There are one or more blank fields.");
+		}
+	}
+		
+	private void validIfCategoryAndPayOfBillIsNull(Bill bill) {
+		boolean isCategoryNull = bill.getCategory().getName() == null;
+		boolean isPayNull = bill.getPay().getDescription() == null;
+		if (isPayNull || isCategoryNull) {
+			throw new IllegalArgumentException("There are one or more null fields.");
+		}
+	}
+	
+	private void validIfPriceTotalAndQuantityOfBillIsNull(Bill bill) {
+		boolean isPriceTotalNull = bill.getPriceTotal() == null;
+		boolean isQuantityPaymentInstallment = bill.getQuantityPaymentInstallments() == null;
+		if(isPriceTotalNull || isQuantityPaymentInstallment) {
+			throw new IllegalArgumentException("There are one or more null fields.");
+		}
+	}
+	
+	private void validIfAttributesOfBillContainsOrSpecialCharacters(Bill bill) {
+		Useful.validIfItHasNumbersOrSpecialCharacters(bill.getDescription());
+	}
+
+	private List<Bill> validIfTheReturnedDataBelongsToUser(List<Bill> bill) {	
+		List<Bill> list = new ArrayList<Bill>();
+		for(int i=0; i<bill.size(); i++) {
+			String isUsername = bill.get(i).getUsername();
+			String isUsernameLogged = userService.takesTheEmailOfTheUserLogin();
+			if(isUsername.equalsIgnoreCase(isUsernameLogged)) {
+				list.add(bill.get(i));
+			}
+		}
+		return list;
+	}
+
 }

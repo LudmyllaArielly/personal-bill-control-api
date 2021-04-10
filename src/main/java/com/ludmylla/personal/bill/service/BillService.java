@@ -13,20 +13,20 @@ public interface BillService {
 
 	Long save(Bill bill) throws ParseException;
 
-	void update(Bill bill) throws ParseException;
-
 	List<Bill> listAll();
 
-	void delete(Long id);
-
-	List<Bill> findUserBill();
-
-	List<Bill> findBillAttributes(String description, String justification, BigDecimal priceTotal);
+	List<Bill> findsAllUserAccounts();
 
 	List<Bill> findBillPaymentInstallmentByDate(Date dateStart, Date dateEnd);
-	
+
 	List<Bill> findBillByDate(Date dateStart, Date dateEnd);
 
 	List<Bill> findAccountTypeAndValueType(AccountType accountType, ValueType valueType);
+
+	List<Bill> findBillByAttributes(String description, String justification, BigDecimal priceTotal);
+
+	void update(Bill bill) throws ParseException;
+
+	void delete(Long id);
 
 }

@@ -17,29 +17,29 @@ public interface BillMapper {
 
 	BillMapper INSTANCE = Mappers.getMapper(BillMapper.class);
 
-	@Mappings({ 
-			@Mapping(target = "id", ignore = true),
-			@Mapping(target = "username", ignore = true),
-			@Mapping(target = "paymentInstallments", ignore = true),
-			@Mapping(target = "category", source = "categoryInsertDtos"),
-			@Mapping(target = "pay", source = "payInsertAndListAllDto") })
-	Bill toBillCreateDto(BillCreateDto source);
-
 	@Mappings({
-			@Mapping(target = "paymentInstallments", ignore = true),
+			@Mapping(target = "id", ignore = true), 
 			@Mapping(target = "username", ignore = true),
-			@Mapping(target = "category", source = "categoryInsertDtos"),
-			@Mapping(target = "pay", source = "payInsertAndListAllDto") })
-	Bill toBillUpdateDto(BillUpdateDto source);
+			@Mapping(target = "paymentInstallments", ignore = true),
+			@Mapping(target = "category", source = "categoryCreateAndListAllDto"),
+			@Mapping(target = "pay", source = "payCreateAndListAllDto") })
+	Bill toBill(BillCreateDto source);
 
-	@Mapping(target = "paymentInstallmentCreateDtos", source = "paymentInstallments")
-	@Mapping(target = "categoryInsertDtos", source = "category")
-	@Mapping(target = "payInsertAndListAllDto", source = "pay")
+	@Mappings({ @Mapping(target = "paymentInstallments", ignore = true), 
+			@Mapping(target = "username", ignore = true),
+			@Mapping(target = "category", source = "categoryCreateAndListAllDto"),
+			@Mapping(target = "pay", source = "payCreateAndListAllDto") })
+	Bill toBill(BillUpdateDto source);
+	@Mappings({
+		@Mapping(target = "paymentInstallmentCreateDtos", source = "paymentInstallments"),
+		@Mapping(target = "categoryCreateAndListAllDto", source = "category"),
+		@Mapping(target = "payCreateAndListAllDto", source = "pay")
+	})
 	BillListAllDto dtoBillListAllDto(Bill source);
 
 	@Mappings({ 
 			@Mapping(target = "paymentInstallments", source = "paymentInstallmentCreateDtos"),
-			@Mapping(target = "category", source = "categoryInsertDtos"),
+			@Mapping(target = "category", source = "categoryCreateAndListAllDto"),
 			@Mapping(target = "pay", source = "payInsertAndListAllDto") })
 	List<BillListAllDto> dtoBillListAllDto(List<Bill> source);
 

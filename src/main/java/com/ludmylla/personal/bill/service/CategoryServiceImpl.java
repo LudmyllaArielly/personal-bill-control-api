@@ -24,7 +24,7 @@ public class CategoryServiceImpl implements CategoryService {
 	@Transactional
 	@Override
 	public Long save(Category category) {
-		validations(category);
+		validationsSave(category);
 		Category categoryCreate = categoryRepository.save(category);
 		return categoryCreate.getId();
 	}
@@ -32,34 +32,37 @@ public class CategoryServiceImpl implements CategoryService {
 	@Transactional
 	@Override
 	public List<Category> listAll() {
+		validIfTokenIsNull();
 		List<Category> list = categoryRepository.findAll();
 		return list;
 	}
+	
 	@Override
 	public Category findByName(String name) {
 		Category category = categoryRepository.findByName(name);
 		return category;
 	}
 	
-
-	@Transactional
 	@Override
-	public List<Category> findCategoryBill(List<Category> category) {
-		/*List<Category> list = new ArrayList<>();		
-		for (int i = 0; i < category.size(); i++) {
-			List<Category> categories = categoryRepository.findByName(category.get(i).getName());
-			list.addAll(categories);
-		}*/
-		return null;
+	public List<Category> mostUsedCategory() {
+		validIfTokenIsNull();
+		List<Category> list = categoryRepository.mostUsedCategory();
+		return list;
 	}
-
-
+	
+	@Override
+	public void validIfCategoryIsNull(Category category) {
+		boolean isCategoryNull = category == null;
+		if(isCategoryNull) {
+			throw new IllegalArgumentException("Category does not exist!");
+		}
+	}
+	
 	@Modifying
 	@Transactional
 	@Override
 	public Long update(Category category) {
-		validationsIfCategoryExits(category.getId());
-		validations(category);
+		validationsUpdate(category);
 		Category categoryUpdate = categoryRepository.save(category);
 		return categoryUpdate.getId();
 	}
@@ -67,29 +70,33 @@ public class CategoryServiceImpl implements CategoryService {
 	@Transactional
 	@Override
 	public void delete(Long id) {
-		validationsIfCategoryExits(id);
-		validationsDelete();
+		validationsDelete(id);
 		Optional<Category> category = categoryRepository.findById(id);
 		Category categories = category.get();
 		categoryRepository.delete(categories);
 	}
 
-	private void validations(Category category) {
+	private void validationsSave(Category category) {
+		validIfTokenIsNullAndValidUserAccess();
 		validIfCategoryNameIsNull(category);
 		validIfCategoryNameIsBlank(category);
 		validTheQuantityOfLettersInCategory(category);
 		validIfTheNameHasNumbersOrSpecialCharacters(category);
-		validIfTokenIsNull();
-		validUserAccess();
 	}
 	
-	private void validationsDelete() {
-		validIfTokenIsNull();
-		validUserAccess();
+	private void validationsUpdate(Category category) {
+		validationsSave(category);
+		validIfCategoryExits(category.getId());
 	}
 	
-	private void validationsIfCategoryExits(Long id) {
+	private void validationsDelete(Long id) {
+		validIfTokenIsNullAndValidUserAccess();
 		validIfCategoryExits(id);
+	}
+	
+	private void validIfTokenIsNullAndValidUserAccess() {
+		validIfTokenIsNull();
+		validUserAccess();
 	}
 
 	private void validIfCategoryNameIsNull(Category category) {
@@ -132,18 +139,6 @@ public class CategoryServiceImpl implements CategoryService {
 	
 	private void validUserAccess() {
 		userService.releasesAuthorizationForTheUser();
-	}
-
-	@Override
-	public List<Category> mostUsedCategory() {
-		//List<Category> item = new ArrayList<Category>();
-		List<Category> list = categoryRepository.mostUsedCategory();
-		
-		for(int i=1; i<=list.size(); i++) {
-			System.out.println(i);
-		}
-		
-		return list;
 	}
 
 }

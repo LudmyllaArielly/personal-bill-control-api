@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import javax.persistence.OneToOne;
-
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.ludmylla.personal.bill.model.enums.AccountType;
 import com.ludmylla.personal.bill.model.enums.ValueType;
@@ -25,11 +23,9 @@ public class BillCreateDto implements Serializable {
 
 	private ValueType valueType;
 
-	@OneToOne
-	private CategoryInsertDto categoryInsertDtos;
+	private CategoryCreateAndListAllDto categoryCreateAndListAllDto;
 
-	@OneToOne
-	private PayInsertAndListAllDto payInsertAndListAllDto;
+	private PayCreateAndListAllDto payCreateAndListAllDto;
 
 	public String getDescription() {
 		return description;
@@ -87,20 +83,20 @@ public class BillCreateDto implements Serializable {
 		this.valueType = valueType;
 	}
 
-	public CategoryInsertDto getCategoryInsertDtos() {
-		return categoryInsertDtos;
+	public CategoryCreateAndListAllDto getCategoryCreateAndListAllDto() {
+		return categoryCreateAndListAllDto;
 	}
 
-	public void setCategoryInsertDtos(CategoryInsertDto categoryInsertDtos) {
-		this.categoryInsertDtos = categoryInsertDtos;
+	public void setCategoryCreateAndListAllDto(CategoryCreateAndListAllDto categoryCreateAndListAllDto) {
+		this.categoryCreateAndListAllDto = categoryCreateAndListAllDto;
 	}
 
-	public PayInsertAndListAllDto getPayInsertAndListAllDto() {
-		return payInsertAndListAllDto;
+	public PayCreateAndListAllDto getPayCreateAndListAllDto() {
+		return payCreateAndListAllDto;
 	}
 
-	public void setPayInsertAndListAllDto(PayInsertAndListAllDto payInsertAndListAllDto) {
-		this.payInsertAndListAllDto = payInsertAndListAllDto;
+	public void setPayCreateAndListAllDto(PayCreateAndListAllDto payCreateAndListAllDto) {
+		this.payCreateAndListAllDto = payCreateAndListAllDto;
 	}
 
 }

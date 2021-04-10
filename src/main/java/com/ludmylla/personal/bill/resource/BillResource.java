@@ -1,7 +1,6 @@
 package com.ludmylla.personal.bill.resource;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -9,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,20 +37,18 @@ public class BillResource {
 	@PostMapping
 	public ResponseEntity<String> createBill(@RequestBody BillCreateDto billCreateDto){	
 		try {
-			Bill bill = BillMapper.INSTANCE.toBillCreateDto(billCreateDto);
+			Bill bill = BillMapper.INSTANCE.toBill(billCreateDto);
 			billService.save(bill);
 			return ResponseEntity.status(HttpStatus.CREATED).body(" Bill successfully registered!  ");
-		} catch (ParseException e) {
+		}  catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(" Failed bill registered!  " + e.getMessage());
-		}catch (HttpMessageNotReadableException e) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(" Failed bill registered: AccountType and ValueType cannot be empty or null.  " + e.getMessage());
 		}
 	}
-	
-	@PutMapping("/{id}")
+
+	@PutMapping
 	public ResponseEntity<String> updateBill(@RequestBody BillUpdateDto billUpdateDto){
 		try {
-			Bill bill = BillMapper.INSTANCE.toBillUpdateDto(billUpdateDto);
+			Bill bill = BillMapper.INSTANCE.toBill(billUpdateDto);
 			billService.update(bill);
 			return ResponseEntity.status(HttpStatus.OK).body("Account updated successfully!");
 		} catch (Exception e) {
@@ -72,10 +68,10 @@ public class BillResource {
 		}
 	}
 	
-	@GetMapping("/user")
-	public ResponseEntity<List<BillListAllDto>> findUserBill(){
+	@GetMapping("/findsAllUserAccounts")
+	public ResponseEntity<List<BillListAllDto>> findsAllUserAccounts(){
 		try {
-			List<Bill> bill = billService.findUserBill();
+			List<Bill> bill = billService.findsAllUserAccounts();
 			List<BillListAllDto> billListAllDtos = BillMapper.INSTANCE
 					.dtoBillListAllDto(bill);
 			return new ResponseEntity<List<BillListAllDto>>(billListAllDtos,HttpStatus.OK);
@@ -84,12 +80,13 @@ public class BillResource {
 		}
 	}
 	
-	@GetMapping("/fields")
-	public ResponseEntity<List<BillListAllDto>> findBillForParameters(@RequestParam(required = false) String description,
+	@GetMapping("/findBillByAttributes")
+	public ResponseEntity<List<BillListAllDto>> findBillByAttributes(
+			@RequestParam(required = false) String description,
 			@RequestParam(required = false) String justification,
 			@RequestParam(required = false ) BigDecimal priceTotal){		
 		try {
-			List<Bill> bill = billService.findBillAttributes(description, justification, priceTotal);
+			List<Bill> bill = billService.findBillByAttributes(description, justification, priceTotal);
 			List<BillListAllDto> billListAllDtos = BillMapper.INSTANCE
 					.dtoBillListAllDto(bill);
 			return new ResponseEntity<List<BillListAllDto>>(billListAllDtos,HttpStatus.OK);
@@ -98,8 +95,9 @@ public class BillResource {
 		}
 	}
 	
-	@GetMapping("/paymentInstallments/{dateStart}{dateEnd}")
-	public ResponseEntity<List<BillListAllDto>> findBillPaymentInstallmentByDate(@RequestParam("dateEnd") @DateTimeFormat(pattern = "yyyy-MM-dd" )Date dateEnd,
+	@GetMapping("/findsInstallmentByDate")
+	public ResponseEntity<List<BillListAllDto>> findBillPaymentInstallmentByDate(
+			@RequestParam("dateEnd") @DateTimeFormat(pattern = "yyyy-MM-dd" )Date dateEnd,
 			@RequestParam("dateStart") @DateTimeFormat(pattern = "yyyy-MM-dd" ) Date dateStart){		
 		try {
 			List<Bill> bill = billService.findBillPaymentInstallmentByDate(dateStart, dateEnd);
@@ -111,8 +109,9 @@ public class BillResource {
 		}
 	}
 	
-	@GetMapping("/{dateStart}{dateEnd}")
-	public ResponseEntity<List<BillListAllDto>> findBillByDate(@RequestParam("dateEnd") @DateTimeFormat(pattern = "yyyy-MM-dd" )Date dateEnd,
+	@GetMapping("/findBillByDate")
+	public ResponseEntity<List<BillListAllDto>> findBillByDate(
+			@RequestParam("dateEnd") @DateTimeFormat(pattern = "yyyy-MM-dd" )Date dateEnd,
 			@RequestParam("dateStart") @DateTimeFormat(pattern = "yyyy-MM-dd" ) Date dateStart){		
 		try {
 			List<Bill> bill = billService.findBillByDate(dateStart, dateEnd);
@@ -124,8 +123,9 @@ public class BillResource {
 		}
 	}
 	
-	@GetMapping("/{accountType}{valueType}")
-	public ResponseEntity<List<BillListAllDto>> findAccountTypeAndValueType(@RequestParam(required = false) AccountType accountType,
+	@GetMapping("/findBillByAccountTypeAndValueType")
+	public ResponseEntity<List<BillListAllDto>> findAccountTypeAndValueType(
+			@RequestParam(required = false) AccountType accountType,
 			@RequestParam(required = false) ValueType valueType){		
 		try {
 			List<Bill> bill = billService.findAccountTypeAndValueType(accountType, valueType);

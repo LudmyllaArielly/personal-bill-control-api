@@ -14,7 +14,6 @@ import javax.persistence.TemporalType;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @Entity
@@ -27,7 +26,7 @@ public class PaymentInstallments implements Serializable {
 	private Long id;
 	private BigDecimal installmentPrice;
 	private Integer installmentNumber;
-	@JsonFormat(pattern = "dd/MM/yyyy", shape = JsonFormat.Shape.STRING)
+
 	@DateTimeFormat(iso = ISO.DATE)
 	@JsonDeserialize(as = Date.class)
 	@Temporal(TemporalType.DATE)

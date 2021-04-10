@@ -9,6 +9,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ludmylla.personal.bill.mapper.SolicitationMapper;
 import com.ludmylla.personal.bill.model.Solicitation;
-import com.ludmylla.personal.bill.model.dto.SolicitationInsertDto;
+import com.ludmylla.personal.bill.model.dto.SolicitationCreateDto;
 import com.ludmylla.personal.bill.model.dto.SolicitationListAllDto;
 import com.ludmylla.personal.bill.model.dto.SolicitationUpdateStatusDto;
 import com.ludmylla.personal.bill.service.SolicitationService;
@@ -29,9 +30,9 @@ public class SolicitationResource {
 	private SolicitationService solicitationService;
 	
 	@PostMapping
-	public ResponseEntity<String> createSolicitation(@RequestBody SolicitationInsertDto solicitationInsertDto){
+	public ResponseEntity<String> createSolicitation(@RequestBody SolicitationCreateDto solicitationCreateDto){
 		try {
-			Solicitation solicitation = SolicitationMapper.INSTANCE.toSolicitationInsertDto(solicitationInsertDto);
+			Solicitation solicitation = SolicitationMapper.INSTANCE.toSolicitation(solicitationCreateDto);
 			solicitationService.save(solicitation);
 			
 			return ResponseEntity.status(HttpStatus.CREATED).body("Solicitation created!");
@@ -40,7 +41,7 @@ public class SolicitationResource {
 	  }
 	}
 	
-	@GetMapping("/listAll")
+	@GetMapping
 	public ResponseEntity<List<SolicitationListAllDto>> listAll(){
 		try {
 			List<Solicitation> solicitations = solicitationService.listAll();
@@ -52,10 +53,10 @@ public class SolicitationResource {
 		}
 	}
 	
-	@GetMapping
-	public ResponseEntity<List<SolicitationListAllDto>> findBySolicitationOfUser(){
+	@GetMapping("/findsAllUserSolicitation")
+	public ResponseEntity<List<SolicitationListAllDto>> findsAllUserSolicitation(){
 		try {
-			List<Solicitation> solicitations = solicitationService.findBySolicitationsOfUser();
+			List<Solicitation> solicitations = solicitationService.findsAllUserSolicitation();
 			List<SolicitationListAllDto> solicitationListAllDtos = SolicitationMapper
 					.INSTANCE.dtoSolicitationListAllDto(solicitations);
 			return new ResponseEntity<List<SolicitationListAllDto>>(solicitationListAllDtos,HttpStatus.OK);
@@ -64,11 +65,11 @@ public class SolicitationResource {
 		}
 	}
 	
-	@PatchMapping("/{id}")
+	@PatchMapping
 	public ResponseEntity<String> updateSolicitation(@RequestBody SolicitationUpdateStatusDto solicitationUpdateStatusDto){
 		try {
 			Solicitation solicitation = SolicitationMapper.INSTANCE
-					.toSolicitationUpdateStatusDto(solicitationUpdateStatusDto);
+					.toSolicitation(solicitationUpdateStatusDto);
 			solicitationService.update(solicitation);
 			return ResponseEntity.status(HttpStatus.OK).body("Solicitation updated!");
 			
@@ -80,7 +81,7 @@ public class SolicitationResource {
 	}
 		
 	@DeleteMapping("/{id}")
-	public ResponseEntity<String> deleteSolicitation(Long id){
+	public ResponseEntity<String> deleteSolicitation(@PathVariable("id") Long id){
 		try {
 			solicitationService.delete(id);
 			return ResponseEntity.status(HttpStatus.OK).body(" Successfully deleted! ");

@@ -1,11 +1,6 @@
 package com.ludmylla.personal.bill.model.dto;
 
-import java.io.Serializable;
-
-public class SolicitationInsertDto implements Serializable {
-
-	private static final long serialVersionUID = 1L;
-
+public class PayCreateAndListAllDto {
 	private String description;
 
 	public String getDescription() {

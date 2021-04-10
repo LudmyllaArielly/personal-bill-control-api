@@ -14,15 +14,15 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.ludmylla.personal.bill.model.enums.AccountType;
 import com.ludmylla.personal.bill.model.enums.ValueType;
@@ -42,7 +42,6 @@ public class Bill implements Serializable {
 
 	private String justification;
 
-	@JsonFormat(pattern = "dd/MM/yyyy", shape = JsonFormat.Shape.STRING)
 	@DateTimeFormat(iso = ISO.DATE)
 	@JsonDeserialize(as = Date.class)
 	@Temporal(TemporalType.DATE)
@@ -57,10 +56,12 @@ public class Bill implements Serializable {
 	@OneToMany(fetch = FetchType.LAZY)
 	private List<PaymentInstallments> paymentInstallments = new ArrayList<>();
 
-	@OneToOne
+	@ManyToOne
+	@JoinColumn(name = "CATEGORY_ID")
 	private Category category;
 
-	@OneToOne
+	@ManyToOne
+	@JoinColumn(name = "PAY_ID")
 	private Pay pay;
 
 	public Long getId() {
@@ -159,6 +160,10 @@ public class Bill implements Serializable {
 		this.pay = pay;
 	}
 
+	public BigDecimal returnInstallmentPrice() {
+		return priceTotal.divide(quantityPaymentInstallments, 2, RoundingMode.HALF_UP);
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -192,15 +197,5 @@ public class Bill implements Serializable {
 				+ valueType + ", paymentInstallments=" + paymentInstallments + ", category=" + category + ", pay=" + pay
 				+ "]";
 	}
-
-	public BigDecimal returnInstallmentPrice() {
-		return priceTotal.divide(quantityPaymentInstallments,2, RoundingMode.HALF_UP);
-	}
-	
-	public Date returnPurchaseDate() {
-		return this.purchaseDate;
-		
-	}
-
 
 }

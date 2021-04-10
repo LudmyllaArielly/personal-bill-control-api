@@ -10,8 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 @Entity
 public class UserAuthorize implements Serializable {
 
@@ -24,7 +22,6 @@ public class UserAuthorize implements Serializable {
 	private String role;
 
 	@Temporal(TemporalType.DATE)
-	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date dateOfTheDay = new Date();
 
 	public Long getId() {
