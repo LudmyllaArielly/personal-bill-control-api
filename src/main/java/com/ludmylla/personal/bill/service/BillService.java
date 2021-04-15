@@ -28,5 +28,7 @@ public interface BillService {
 	void update(Bill bill) throws ParseException;
 
 	void delete(Long id);
+	
+	List<Bill> checksWhetherTheCategoryIsInTheBill(Long id);
 
 }

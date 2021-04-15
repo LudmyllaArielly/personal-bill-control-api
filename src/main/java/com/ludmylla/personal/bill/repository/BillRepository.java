@@ -36,5 +36,7 @@ public interface BillRepository extends JpaRepository<Bill, Long> {
 	
 	@Query("select u from Bill u where u.purchaseDate between :dataStart and :dateEnd")
 	List<Bill> findBillByDate(@Param("dataStart") Date dateStart, @Param("dateEnd") Date dateEnd);
-
+	
+	@Query("select u from Bill u where u.category_id = ?1")
+	List<Bill> checksWhetherTheCategoryIsInTheBill(Long id);
 }
