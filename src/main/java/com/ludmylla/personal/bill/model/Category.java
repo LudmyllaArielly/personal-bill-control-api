@@ -19,7 +19,7 @@ public class Category implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@NotNull(message = "Category cannot be null.")
 	@NotBlank(message = "Category cannot be blank.")
 	@Size(min = 3, max = 50, message = "Category must have a minimum of 3 letters and a maximum of 50.")

@@ -30,7 +30,7 @@ public class SolicitationServiceImpl implements SolicitationService {
 
 	@Override
 	public Long save(Solicitation solicitation) {
-		validations(solicitation);
+		validationsSave(solicitation);
 		solicitation.setStatus(Status.OPEN);
 		solicitation.setSolicitationDate(ZonedDateTime.now(ZoneId.of(zoneId)));
 		solicitation.setUsername(userService.takesTheEmailOfTheUserLogin());
@@ -40,16 +40,16 @@ public class SolicitationServiceImpl implements SolicitationService {
 
 	@Override
 	public List<Solicitation> listAll() {
-		validations();
+		validIfTokenIsNullAndValidUserAccess();
 		List<Solicitation> solicitations = solicitationRepository.findAllSolicitationOfUser();
 		return solicitations;
 	}
 
 	@Override
-	public List<Solicitation> findBySolicitationsOfUser() {
-		validationsTokenIsNull();
+	public List<Solicitation> findsAllUserSolicitation() {
+		validIfTokenIsNull();
 		List<Solicitation> solicitations = solicitationRepository
-				.findBySolicitationOfUser(userService.takesTheEmailOfTheUserLogin());
+				.findsAllUserSolicitation(userService.takesTheEmailOfTheUserLogin());
 		return solicitations;
 	}
 
@@ -67,35 +67,31 @@ public class SolicitationServiceImpl implements SolicitationService {
 
 	@Override
 	public void delete(Long id) {
-		validations();
-		validIfSolicitationExits(id);
+		validationsDelete(id);
 		Optional<Solicitation> solicitation = solicitationRepository.findById(id);
 		Solicitation solicitations = solicitation.get();
 		solicitationRepository.delete(solicitations);
 	}
 
-	private void validations(Solicitation solicitation) {
-		validationsTokenIsNull();
+	private void validationsSave(Solicitation solicitation) {
+		validIfTokenIsNull();
 		validIfAttributesOfSolicitationIsNull(solicitation);
 		validIfAttributesOfSolicitationIsBlank(solicitation);
 		validIfAttributesOfUserContainsOrSpecialCharacters(solicitation);
 	}
 
 	private void validationsUpdate(Solicitation solicitation) {
-		validationsTokenIsNullAndValidUserAccess();
-		validIfStatusIsNull(solicitation);
+		validIfTokenIsNullAndValidUserAccess();
 		validIfSolicitationExits(solicitation);
+		validIfStatusIsNull(solicitation);
+	}
+	
+	private void validationsDelete(Long id) {
+		validIfTokenIsNullAndValidUserAccess();
+		validIfSolicitationExits(id);
 	}
 
-	private void validations() {
-		validationsTokenIsNullAndValidUserAccess();
-	}
-
-	private void validationsTokenIsNull() {
-		validIfTokenIsNull();
-	}
-
-	private void validationsTokenIsNullAndValidUserAccess() {
+	private void validIfTokenIsNullAndValidUserAccess() {
 		validIfTokenIsNull();
 		validUserAccess();
 	}
@@ -119,7 +115,7 @@ public class SolicitationServiceImpl implements SolicitationService {
 	private void validIfStatusIsNull(Solicitation solicitation) {
 		boolean isStatusNull = solicitation.getStatus() == null;
 		if (isStatusNull) {
-			throw new IllegalArgumentException("Status cannot be null.");
+			throw new IllegalArgumentException("Status cannot be blank fields.");
 		}
 	}
 	
@@ -133,7 +129,7 @@ public class SolicitationServiceImpl implements SolicitationService {
 
 	private void validIfSolicitationExits(Long id) {
 		Optional<Solicitation> solicitations = solicitationRepository.findById(id);
-		validIfSolicitationStatusIsOpenOptional(solicitations);
+		validIfSolicitationStatusIsOpen(solicitations);
 		boolean isSolicitationExits = solicitations.isEmpty();
 		if (isSolicitationExits) {
 			throw new IllegalArgumentException("Solicitation does not exist.");
@@ -144,8 +140,9 @@ public class SolicitationServiceImpl implements SolicitationService {
 		Useful.validIfItHasNumbersOrSpecialCharacters(solicitation.getDescription());
 	}
 	
-	private void validIfSolicitationStatusIsOpenOptional(Optional<Solicitation> solicitations) {
-		if(solicitations.get().getStatus().equals(Status.OPEN)) {
+	private void validIfSolicitationStatusIsOpen(Optional<Solicitation> solicitations) {
+		boolean isStatusOpen = solicitations.get().getStatus().equals(Status.OPEN);
+		if(isStatusOpen) {
 			throw new IllegalArgumentException("This action could not be performed because the status is open.");
 		}
 	}

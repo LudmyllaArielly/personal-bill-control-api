@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
 	private void savesEmailAndUserRole() {
 		userAuthorizeService.save();
 	}
-	// usado pelo userAuthorization
+
 	public String takesTheRoleOfTheUser() {
 		String roleReceived = userRole;
 		return roleReceived;

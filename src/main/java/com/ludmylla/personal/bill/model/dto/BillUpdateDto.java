@@ -3,19 +3,23 @@ package com.ludmylla.personal.bill.model.dto;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.ludmylla.personal.bill.model.enums.AccountType;
 import com.ludmylla.personal.bill.model.enums.ValueType;
 
-public class BillCreateDto implements Serializable {
+public class BillUpdateDto implements Serializable {
+
 	private static final long serialVersionUID = 1L;
 
+	private Long id;
 	private String description;
-	@JsonDeserialize(as = Date.class)
-	private Date purchaseDate;
 	private BigDecimal priceTotal;
 	private BigDecimal quantityPaymentInstallments;
 	private String justification;
+
+	@JsonDeserialize(as = Date.class)
+	private Date purchaseDate;
 
 	private AccountType accountType;
 
@@ -25,20 +29,20 @@ public class BillCreateDto implements Serializable {
 
 	private PayCreateAndListAllDto payCreateAndListAllDto;
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public String getDescription() {
 		return description;
 	}
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public Date getPurchaseDate() {
-		return purchaseDate;
-	}
-
-	public void setPurchaseDate(Date purchaseDate) {
-		this.purchaseDate = purchaseDate;
 	}
 
 	public BigDecimal getPriceTotal() {
@@ -63,6 +67,14 @@ public class BillCreateDto implements Serializable {
 
 	public void setJustification(String justification) {
 		this.justification = justification;
+	}
+
+	public Date getPurchaseDate() {
+		return purchaseDate;
+	}
+
+	public void setPurchaseDate(Date purchaseDate) {
+		this.purchaseDate = purchaseDate;
 	}
 
 	public AccountType getAccountType() {

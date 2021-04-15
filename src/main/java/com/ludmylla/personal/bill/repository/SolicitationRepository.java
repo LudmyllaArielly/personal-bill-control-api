@@ -14,7 +14,7 @@ import com.ludmylla.personal.bill.model.Solicitation;
 public interface SolicitationRepository extends JpaRepository<Solicitation, Long>{
 	
 	@Query("select u from Solicitation u where lower(u.username) = lower(?1) order by u.solicitationDate ASC")
-	List<Solicitation> findBySolicitationOfUser(String username);
+	List<Solicitation> findsAllUserSolicitation(String username);
 	
 	
 	@Query("select u from Solicitation u order by u.solicitationDate ASC")

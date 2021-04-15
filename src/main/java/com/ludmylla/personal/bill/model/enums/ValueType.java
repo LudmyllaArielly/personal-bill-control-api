@@ -1,6 +1,6 @@
 package com.ludmylla.personal.bill.model.enums;
 
-public enum TipoDoValor {
+public enum ValueType {
 	
 	FIXED, VARIABLE;
 }

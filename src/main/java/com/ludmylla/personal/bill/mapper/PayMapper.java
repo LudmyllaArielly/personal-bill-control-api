@@ -7,21 +7,21 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import com.ludmylla.personal.bill.model.Pay;
-import com.ludmylla.personal.bill.model.dto.PayInsertAndListAllDto;
+import com.ludmylla.personal.bill.model.dto.PayCreateAndListAllDto;
 import com.ludmylla.personal.bill.model.dto.PayUpdateDto;
 
-@Mapper
+@Mapper(uses = { BillMapper.class })
 public interface PayMapper {
-	
+
 	PayMapper INSTANCE = Mappers.getMapper(PayMapper.class);
-	
+
 	@Mapping(target = "id", ignore = true)
-	Pay toPayInsertAndListAllDto (PayInsertAndListAllDto source);
-	
-	PayInsertAndListAllDto dtoPayInsertAndListAllDto (Pay source);
-	
-	List<PayInsertAndListAllDto> dtoPayInsertAndListAllDto (List<Pay> source);
-	
-	Pay toPayUpdateDto (PayUpdateDto source);
+	Pay toPay(PayCreateAndListAllDto source);
+
+	Pay toPay(PayUpdateDto source);
+
+	PayCreateAndListAllDto dtoPayCreateAndListAllDto(Pay source);
+
+	List<PayCreateAndListAllDto> dtoPayCreateAndListAllDto(List<Pay> source);
 
 }

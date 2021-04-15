@@ -8,6 +8,6 @@ import com.ludmylla.personal.bill.model.PaymentInstallments;
 
 @Repository
 @Transactional
-public interface PaymentInstallmentsRepository extends JpaRepository<PaymentInstallments, Long>{
+public interface PaymentInstallmentsRepository extends JpaRepository<PaymentInstallments, Long> {
 
 }

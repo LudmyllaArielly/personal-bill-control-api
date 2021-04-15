@@ -24,7 +24,7 @@ public class PayServiceImpl implements PayService {
 	@Transactional
 	@Override
 	public Long save(Pay pay) {
-		validations(pay);
+		validationsSave(pay);
 		Pay payCreate = payRespository.save(pay);
 		return payCreate.getId();
 	}
@@ -32,6 +32,7 @@ public class PayServiceImpl implements PayService {
 	@Transactional
 	@Override
 	public List<Pay> listAll() {
+		validIfTokenIsNull();
 		List<Pay> payments = payRespository.findAll();
 		return payments;
 	}
@@ -39,16 +40,24 @@ public class PayServiceImpl implements PayService {
 	@Transactional
 	@Override
 	public Pay findByDescription(String description) {
+		validIfTokenIsNull();
 		Pay payments = payRespository.findByDescription(description);
 		return payments;
 	}
 	
+	@Override
+	public void validIfPayIsNull(Pay pay) {
+		boolean isPayExits = pay == null;
+		if(isPayExits) {
+			throw new IllegalArgumentException("Pay does not exist!");
+		}
+	}
+
 	@Modifying
 	@Transactional
 	@Override
 	public Long update(Pay pay) {
-		validIfPaymentsExist(pay.getId());
-		validations(pay);
+		validationsUpdate(pay);
 		Pay payUpdate = payRespository.save(pay);
 		return payUpdate.getId();
 	}
@@ -56,23 +65,31 @@ public class PayServiceImpl implements PayService {
 	@Transactional
 	@Override
 	public void delete(Long id) {
-		validations();
-		validIfPaymentsExist(id);
+		validationsDelete(id);
 		Optional<Pay> pay = payRespository.findById(id);
 		Pay payments = pay.get();
 		payRespository.delete(payments);
 	}
 	
-	private void validations(Pay pay) {
+	private void validationsSave(Pay pay) {
+		validIfTokenIsNullAndValidUserAccess();
 		validIfDescriptionIsNull(pay);
 		validIfDescriptionIsBlank(pay);
 		validTheMinAndMaxOfCharactersInPayments(pay);
 		validIfTheDescriptionHasNumbersOrSpecialCharacters(pay);
-		validIfTokenIsNull();
-		validUserAccess();
 	}
 	
-	private void validations() {
+	private void validationsUpdate(Pay pay){
+		validationsSave(pay);
+		validIfPaymentsExist(pay.getId());
+	}
+	
+	private void validationsDelete(Long id) {
+		validIfTokenIsNullAndValidUserAccess();
+		validIfPaymentsExist(id);
+	}
+	
+	private void validIfTokenIsNullAndValidUserAccess() {
 		validIfTokenIsNull();
 		validUserAccess();
 	}

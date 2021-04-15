@@ -1,11 +1,19 @@
 package com.ludmylla.personal.bill.model;
 
 import java.io.Serializable;
-
+import java.math.BigDecimal;
+import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @Entity
 public class PaymentInstallments implements Serializable {
@@ -15,9 +23,23 @@ public class PaymentInstallments implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private Double installmentPrice;
+
+	private BigDecimal installmentPrice;
 	private Integer installmentNumber;
-	private String installmentDate;
+
+	@DateTimeFormat(iso = ISO.DATE)
+	@JsonDeserialize(as = Date.class)
+	@Temporal(TemporalType.DATE)
+	private Date installmentDate;
+
+	public PaymentInstallments() {
+	}
+
+	public PaymentInstallments(BigDecimal installmentPrice, Integer installmentNumber, Date installmentDate) {
+		this.installmentPrice = installmentPrice;
+		this.installmentNumber = installmentNumber;
+		this.installmentDate = installmentDate;
+	}
 
 	public Long getId() {
 		return id;
@@ -27,11 +49,10 @@ public class PaymentInstallments implements Serializable {
 		this.id = id;
 	}
 
-	public Double getInstallmentPrice() {
+	public BigDecimal getInstallmentPrice() {
 		return installmentPrice;
 	}
-
-	public void setInstallmentPrice(Double installmentPrice) {
+	public void setInstallmentPrice(BigDecimal installmentPrice) {
 		this.installmentPrice = installmentPrice;
 	}
 
@@ -43,13 +64,15 @@ public class PaymentInstallments implements Serializable {
 		this.installmentNumber = installmentNumber;
 	}
 
-	public String getInstallmentDate() {
+	public Date getInstallmentDate() {
 		return installmentDate;
 	}
 
-	public void setInstallmentDate(String installmentDate) {
-		this.installmentDate = installmentDate;
+
+	public Date setInstallmentDate(Date installmentDate) {
+		return this.installmentDate = installmentDate;
 	}
+	
 
 	@Override
 	public int hashCode() {

@@ -10,7 +10,7 @@ public interface SolicitationService {
 	
 	List<Solicitation> listAll();
 	
-	List<Solicitation> findBySolicitationsOfUser();
+	List<Solicitation> findsAllUserSolicitation();
 	
 	void update(Solicitation solicitation);
 	

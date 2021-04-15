@@ -1,6 +1,4 @@
 package com.ludmylla.personal.bill.useful;
-
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Useful {
@@ -19,7 +17,28 @@ public class Useful {
 		}
 	}
 
+	public static void validIfAttributesAreBlankDate(Date compare) {
+		boolean isAttributesBlank = compare.toString().isBlank();
+		if (isAttributesBlank) {
+			throw new IllegalArgumentException("There are one or more blank fields.");
+		}
+	}
+
 	public static void validIfAttributesIsNull(String compare) {
+		boolean isAttributesNull = compare == null;
+		if (isAttributesNull) {
+			throw new IllegalArgumentException("There are one or more null fields.");
+		}
+	}
+
+	public static void validIfAttributesIsNullEnums(Enum<?> compare) {
+		boolean isAttributesNull = compare == null;
+		if (isAttributesNull) {
+			throw new IllegalArgumentException("There are one or more null fields.");
+		}
+	}
+
+	public static void validIfAttributesIsNullDate(Date compare) {
 		boolean isAttributesNull = compare == null;
 		if (isAttributesNull) {
 			throw new IllegalArgumentException("There are one or more null fields.");
@@ -30,10 +49,5 @@ public class Useful {
 		Double formattedRoundsValue = Math.round(round * 100.0) / 100.0;
 		return formattedRoundsValue;
 	}
-	
-	public static String formattDate (Date value) {
-		SimpleDateFormat formatt = new SimpleDateFormat("dd/MM/yyyy");
-		return formatt.format(value);
-	}
-	
+
 }

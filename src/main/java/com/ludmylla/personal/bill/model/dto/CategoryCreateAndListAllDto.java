@@ -1,7 +1,10 @@
 package com.ludmylla.personal.bill.model.dto;
 
-public class CategoryInsertAndListAllDto {
+import java.io.Serializable;
 
+public class CategoryCreateAndListAllDto implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 	private String name;
 
 	public String getName() {
