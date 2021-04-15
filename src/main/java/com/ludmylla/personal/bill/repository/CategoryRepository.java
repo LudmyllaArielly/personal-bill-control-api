@@ -15,9 +15,8 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
 	Category findByName(String name);
 	
-	@Query(value = "select  c.*, CONCAT(b.category_id, \"(\",count(b.id),\")\") as category_id "
-			+ "from Bill as b left join category as c on b.category_id=c.id group by category_id "
-			+ "order by category_id ASC;", nativeQuery = true)
+	@Query(value = "select c.*, count(b.category_id) from category as c"
+			+ " join bill as b on c.id=b.category_id group by c.id order by c.id desc;", nativeQuery = true)
 	List<Category> mostUsedCategory();
 
 }
