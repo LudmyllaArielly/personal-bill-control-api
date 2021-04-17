@@ -21,6 +21,9 @@ public class PayServiceImpl implements PayService {
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private BillService billService;
+	
 	@Transactional
 	@Override
 	public Long save(Pay pay) {
@@ -87,6 +90,7 @@ public class PayServiceImpl implements PayService {
 	private void validationsDelete(Long id) {
 		validIfTokenIsNullAndValidUserAccess();
 		validIfPaymentsExist(id);
+		checkIfThePayIsPartOfTheBill(id);
 	}
 	
 	private void validIfTokenIsNullAndValidUserAccess() {
@@ -120,6 +124,14 @@ public class PayServiceImpl implements PayService {
 	private void validIfTheDescriptionHasNumbersOrSpecialCharacters(Pay pay) {
 		String hasNumbersOrSpecialCharactersInDescription = pay.getDescription();
 		Useful.validIfItHasNumbersOrSpecialCharacters(hasNumbersOrSpecialCharactersInDescription);
+	}
+	
+	public void checkIfThePayIsPartOfTheBill(Long id) {
+		boolean isPayExistInTheBill = billService.checksWhetherTheCategoryIsInTheBill(id).isEmpty();
+		
+		if(!isPayExistInTheBill) {
+			throw new IllegalArgumentException("The Pay cannot be excluded because it is being used by the bill.");
+		}
 	}
 	
 	private void validIfTokenIsNull() {
