@@ -20,6 +20,9 @@ public class CategoryServiceImpl implements CategoryService {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private BillService billService;
 
 	@Transactional
 	@Override
@@ -92,6 +95,7 @@ public class CategoryServiceImpl implements CategoryService {
 	private void validationsDelete(Long id) {
 		validIfTokenIsNullAndValidUserAccess();
 		validIfCategoryExits(id);
+		checkIfTheCategoryIsPartOfTheBill(id);
 	}
 	
 	private void validIfTokenIsNullAndValidUserAccess() {
@@ -131,6 +135,15 @@ public class CategoryServiceImpl implements CategoryService {
 	private void validIfTheNameHasNumbersOrSpecialCharacters(Category category) {
 		String hasNumbersOrSpecialCharactersInName = category.getName();
 		Useful.validIfItHasNumbersOrSpecialCharacters(hasNumbersOrSpecialCharactersInName);
+	}
+	
+	@Transactional
+	private void checkIfTheCategoryIsPartOfTheBill(Long id) {
+		boolean isCategoryExistInTheBill = 
+				billService.checksWhetherTheCategoryIsInTheBill(id).isEmpty();
+		if(!isCategoryExistInTheBill) {
+			throw new IllegalArgumentException("The category cannot be excluded because it is being used by the bill.");
+		}
 	}
 	
 	private void validIfTokenIsNull() {

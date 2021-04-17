@@ -260,5 +260,11 @@ public class BillServiceImpl implements BillService {
 		}
 		return list;
 	}
+	
+	@Override
+	public List<Bill> checksWhetherTheCategoryIsInTheBill(Long id){
+		List<Bill> bill = billRepository.checksWhetherTheCategoryIsInTheBill(id);
+		return bill;
+	}
 
 }
