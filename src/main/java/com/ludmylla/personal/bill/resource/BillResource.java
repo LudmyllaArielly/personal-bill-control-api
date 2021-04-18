@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ludmylla.personal.bill.configexcel.ExcelExporter;
+import com.ludmylla.personal.bill.config.ExcelExporter;
 import com.ludmylla.personal.bill.mapper.BillMapper;
 import com.ludmylla.personal.bill.model.Bill;
 import com.ludmylla.personal.bill.model.dto.BillCreateDto;
