@@ -1,8 +1,11 @@
 package com.ludmylla.personal.bill.resource;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -17,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.ludmylla.personal.bill.configexcel.ExcelExporter;
 import com.ludmylla.personal.bill.mapper.BillMapper;
 import com.ludmylla.personal.bill.model.Bill;
 import com.ludmylla.personal.bill.model.dto.BillCreateDto;
@@ -135,6 +140,25 @@ public class BillResource {
 			return new ResponseEntity<List<BillListAllDto>>(HttpStatus.BAD_REQUEST);
 		}
 	}
+	
+	@GetMapping("/exportsTheBillToExcel")
+	public ResponseEntity<String> exportToExcel(HttpServletResponse response)throws IOException{
+		try {
+			response.setContentType("application/octet-stream");
+			
+			String headerKey = "Content-Disposition";
+			String headerValue = "attachment; filename=Bill_info.xlsx";
+			response.setHeader(headerKey, headerValue);
+			
+			List<Bill> listBill = billService.listAll();
+			ExcelExporter excelExporter = new ExcelExporter(listBill);
+			excelExporter.export(response);
+			return new ResponseEntity<String>(HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String> deleteBill(@PathVariable("id") Long id){
