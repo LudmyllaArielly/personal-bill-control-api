@@ -32,23 +32,25 @@ public class ExcelExporter {
 	}
 	
 	private void createCell(Row row, int columnCount, Object value, CellStyle style) {
-		sheet.autoSizeColumn(columnCount);
-		Cell cell = row.createCell(columnCount);
-		
-		if(value instanceof Long) {
-			cell.setCellValue((Long) value);
-		}else if(value instanceof Integer) {
-			cell.setCellValue((Integer) value);
-		}else if(value instanceof Boolean) {
-			cell.setCellValue((Boolean) value);
-		}else if(value instanceof Date) {
-			cell.setCellValue((Date) value);
-		}else {
-			cell.setCellValue((String) value);
-		}
-		
+
+	 		sheet.autoSizeColumn(columnCount);
+			Cell cell = row.createCell(columnCount);
+			
+			if(value instanceof Long) {
+				cell.setCellValue((Long) value);
+			}else if(value instanceof Integer) {
+				cell.setCellValue((Integer) value);
+			}else if(value instanceof Boolean) {
+				cell.setCellValue((Boolean) value);
+			}else if(value instanceof Date) {
+				cell.setCellValue((Date) value);
+			}else {
+				cell.setCellValue((String) value);  
+			}
+			
 		cell.setCellStyle(style);
-	}
+		}
+	
 	
 	private void writeHeaderLine() {
 		sheet = workbook.createSheet("Bill");
@@ -77,10 +79,20 @@ public class ExcelExporter {
 		createCell(row, 5 , "Pay", style);
 		createCell(row, 6 , "Account Type", style);
 		createCell(row, 7 , "Value Type", style);
-		createCell(row, 9, "Installment Number", style);
-		createCell(row, 8, "Installment Price", style);
-		createCell(row, 10, "Installment Date", style);
 	
+			
+		
+			for(int i =0; i<listBill.size(); i++) {
+				if(listBill.get(i).getPaymentInstallments().size() > 0) {
+					int count = 8;
+					for(int j =0; j<listBill.get(i).getPaymentInstallments().size(); j++) {
+						createCell(row, count++, "Installment Number", style);
+						createCell(row, count++, "Installment Price", style);
+						createCell(row, count++ , "Installment Date", style);
+					}
+				}
+		}
+			
 	}
 
 	private void writeDataLines() {
@@ -99,23 +111,22 @@ public class ExcelExporter {
 			createCell(row, columnCount++, bill.getPriceTotal().toPlainString(), style);
 			createCell(row, columnCount++, bill.getQuantityPaymentInstallments().toPlainString(), style);
 			createCell(row, columnCount++, Useful.formatterDate( bill.getPurchaseDate()), style);
-			createCell(row, columnCount++, bill.getCategory().toString() ,style);
-			createCell(row, columnCount++, bill.getPay().toString() ,style);
+			createCell(row, columnCount++, bill.getCategory().getName().toString() ,style);
+			createCell(row, columnCount++, bill.getPay().getDescription().toString() ,style);
 			createCell(row, columnCount++, bill.getAccountType().toString() ,style);
 			createCell(row, columnCount++, bill.getValueType().toString() ,style);
-			if(bill.getPaymentInstallments().size() > 0) {
-				for(int i=0; i<bill.getPaymentInstallments().size(); i++) {
-				
+	
+				for(int i =0; i<bill.getPaymentInstallments().size(); i++) {
 					createCell(row, columnCount++, bill.getPaymentInstallments().get(i).getInstallmentNumber(),style);
 					createCell(row, columnCount++, bill.getPaymentInstallments().get(i).getInstallmentPrice().toPlainString(),style);
 					createCell(row, columnCount++, Useful.formatterDate(bill.getPaymentInstallments().get(i).getInstallmentDate()),style);
 				}	
-	
+			
 			}
 			
 		}
 		
-	}
+	
 	
 	public void export(HttpServletResponse response) throws IOException{
 		writeHeaderLine();
