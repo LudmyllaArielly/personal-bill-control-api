@@ -71,6 +71,11 @@ public class ExcelExporter {
 		font.setFontHeight(16);
 		style.setFont(font);
 		
+		addinAttributesToTheHeaderLine(row, style);
+			
+	}
+	
+	private void addinAttributesToTheHeaderLine(Row row, CellStyle style) {
 		createCell(row, 0, "Description", style);
 		createCell(row, 1, "Price total", style);
 		createCell(row, 2, "Quantity payment installments", style);
@@ -78,21 +83,18 @@ public class ExcelExporter {
 		createCell(row, 4 , "Category", style);
 		createCell(row, 5 , "Pay", style);
 		createCell(row, 6 , "Account Type", style);
-		createCell(row, 7 , "Value Type", style);
-	
-			
+		createCell(row, 7 , "Value Type", style);	
 		
-			for(int i =0; i<listBill.size(); i++) {
-				if(listBill.get(i).getPaymentInstallments().size() > 0) {
-					int count = 8;
-					for(int j =0; j<listBill.get(i).getPaymentInstallments().size(); j++) {
-						createCell(row, count++, "Installment Number", style);
-						createCell(row, count++, "Installment Price", style);
-						createCell(row, count++ , "Installment Date", style);
-					}
+		for(int i =0; i<listBill.size(); i++) {
+			if(listBill.get(i).getPaymentInstallments().size() > 0) {
+				int count = 8;
+				for(int j =0; j<listBill.get(i).getPaymentInstallments().size(); j++) {
+					createCell(row, count++, "Installment Number", style);
+					createCell(row, count++, "Installment Price", style);
+					createCell(row, count++ , "Installment Date", style);
 				}
+			}
 		}
-			
 	}
 
 	private void writeDataLines() {
@@ -103,7 +105,11 @@ public class ExcelExporter {
 		font.setFontHeight(14);
 		style.setFont(font);
 		
+		addingDataToTheLine(style, rowCount);
 		
+	}	
+	private void addingDataToTheLine(CellStyle style, int rowCount) {
+
 		for(Bill bill : listBill) {
 			Row row = sheet.createRow(rowCount++);
 			int columnCount = 0;
@@ -123,10 +129,7 @@ public class ExcelExporter {
 				}	
 			
 			}
-			
-		}
-		
-	
+	}
 	
 	public void export(HttpServletResponse response) throws IOException{
 		writeHeaderLine();
