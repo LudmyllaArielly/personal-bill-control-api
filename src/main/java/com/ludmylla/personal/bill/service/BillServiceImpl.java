@@ -1,6 +1,7 @@
 package com.ludmylla.personal.bill.service;
 
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -8,11 +9,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ludmylla.personal.bill.config.ExcelExporter;
 import com.ludmylla.personal.bill.model.Bill;
 import com.ludmylla.personal.bill.model.Category;
 import com.ludmylla.personal.bill.model.Pay;
@@ -265,6 +269,19 @@ public class BillServiceImpl implements BillService {
 	public List<Bill> checksWhetherTheCategoryIsInTheBill(Long id){
 		List<Bill> bill = billRepository.checksWhetherTheCategoryIsInTheBill(id);
 		return bill;
+	}
+	
+	@Override
+	public void exportToExcel(HttpServletResponse response) throws IOException {
+		response.setContentType("application/octet-stream");
+		
+		String headerKey = "Content-Disposition";
+		String headerValue = "attachment; filename=Bill_info.xlsx";
+		response.setHeader(headerKey, headerValue);
+		
+		List<Bill> listBill = listAll();
+		ExcelExporter excelExporter = new ExcelExporter(listBill);
+		excelExporter.export(response);
 	}
 
 }
