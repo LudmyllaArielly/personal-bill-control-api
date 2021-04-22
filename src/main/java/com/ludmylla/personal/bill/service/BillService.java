@@ -1,9 +1,12 @@
 package com.ludmylla.personal.bill.service;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 import com.ludmylla.personal.bill.model.Bill;
 import com.ludmylla.personal.bill.model.enums.AccountType;
@@ -30,5 +33,6 @@ public interface BillService {
 	void delete(Long id);
 	
 	List<Bill> checksWhetherTheCategoryIsInTheBill(Long id);
-
+	
+	void exportToExcel(HttpServletResponse response) throws IOException;
 }

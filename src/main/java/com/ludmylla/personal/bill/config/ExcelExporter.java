@@ -31,10 +31,10 @@ public class ExcelExporter {
 		workbook = new XSSFWorkbook();
 	}
 	
-	private void createCell(Row row, int columnCount, Object value, CellStyle style) {
+	private void createCell(Row row, int dataLineNumber, Object value, CellStyle style) {
 
-	 		sheet.autoSizeColumn(columnCount);
-			Cell cell = row.createCell(columnCount);
+	 		sheet.autoSizeColumn(dataLineNumber);
+			Cell cell = row.createCell(dataLineNumber);
 			
 			if(value instanceof Long) {
 				cell.setCellValue((Long) value);
@@ -87,11 +87,11 @@ public class ExcelExporter {
 		
 		for(int i =0; i<listBill.size(); i++) {
 			if(listBill.get(i).getPaymentInstallments().size() > 0) {
-				int count = 8;
+				int headerLineNumber = 8;
 				for(int j =0; j<listBill.get(i).getPaymentInstallments().size(); j++) {
-					createCell(row, count++, "Installment Number", style);
-					createCell(row, count++, "Installment Price", style);
-					createCell(row, count++ , "Installment Date", style);
+					createCell(row, headerLineNumber++, "Installment Number", style);
+					createCell(row, headerLineNumber++, "Installment Price", style);
+					createCell(row, headerLineNumber++, "Installment Date", style);
 				}
 			}
 		}
@@ -112,22 +112,21 @@ public class ExcelExporter {
 
 		for(Bill bill : listBill) {
 			Row row = sheet.createRow(rowCount++);
-			int columnCount = 0;
-			createCell(row, columnCount++, bill.getDescription(), style);
-			createCell(row, columnCount++, bill.getPriceTotal().toPlainString(), style);
-			createCell(row, columnCount++, bill.getQuantityPaymentInstallments().toPlainString(), style);
-			createCell(row, columnCount++, Useful.formatterDate( bill.getPurchaseDate()), style);
-			createCell(row, columnCount++, bill.getCategory().getName().toString() ,style);
-			createCell(row, columnCount++, bill.getPay().getDescription().toString() ,style);
-			createCell(row, columnCount++, bill.getAccountType().toString() ,style);
-			createCell(row, columnCount++, bill.getValueType().toString() ,style);
+			int dataLineNumber = 0;
+			createCell(row, dataLineNumber++, bill.getDescription(), style);
+			createCell(row, dataLineNumber++, bill.getPriceTotal().toPlainString(), style);
+			createCell(row, dataLineNumber++, bill.getQuantityPaymentInstallments().toPlainString(), style);
+			createCell(row, dataLineNumber++, Useful.formatterDate( bill.getPurchaseDate()), style);
+			createCell(row, dataLineNumber++, bill.getCategory().getName().toString() ,style);
+			createCell(row, dataLineNumber++, bill.getPay().getDescription().toString() ,style);
+			createCell(row, dataLineNumber++, bill.getAccountType().toString() ,style);
+			createCell(row, dataLineNumber++, bill.getValueType().toString() ,style);
 	
 				for(int i =0; i<bill.getPaymentInstallments().size(); i++) {
-					createCell(row, columnCount++, bill.getPaymentInstallments().get(i).getInstallmentNumber(),style);
-					createCell(row, columnCount++, bill.getPaymentInstallments().get(i).getInstallmentPrice().toPlainString(),style);
-					createCell(row, columnCount++, Useful.formatterDate(bill.getPaymentInstallments().get(i).getInstallmentDate()),style);
+					createCell(row, dataLineNumber++, bill.getPaymentInstallments().get(i).getInstallmentNumber(),style);
+					createCell(row, dataLineNumber++, bill.getPaymentInstallments().get(i).getInstallmentPrice().toPlainString(),style);
+					createCell(row, dataLineNumber++, Useful.formatterDate(bill.getPaymentInstallments().get(i).getInstallmentDate()),style);
 				}	
-			
 			}
 	}
 	

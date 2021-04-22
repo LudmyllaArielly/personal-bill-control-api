@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ludmylla.personal.bill.config.ExcelExporter;
 import com.ludmylla.personal.bill.mapper.BillMapper;
 import com.ludmylla.personal.bill.model.Bill;
 import com.ludmylla.personal.bill.model.dto.BillCreateDto;
@@ -144,15 +143,7 @@ public class BillResource {
 	@GetMapping("/exportsTheBillToExcel")
 	public ResponseEntity<String> exportToExcel(HttpServletResponse response)throws IOException{
 		try {
-			response.setContentType("application/octet-stream");
-			
-			String headerKey = "Content-Disposition";
-			String headerValue = "attachment; filename=Bill_info.xlsx";
-			response.setHeader(headerKey, headerValue);
-			
-			List<Bill> listBill = billService.listAll();
-			ExcelExporter excelExporter = new ExcelExporter(listBill);
-			excelExporter.export(response);
+			billService.exportToExcel(response);
 			return new ResponseEntity<String>(HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
