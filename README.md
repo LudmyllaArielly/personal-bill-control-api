@@ -142,7 +142,7 @@ Exemplo de endereço com swagger: http://localhost:8080/swagger-ui.html#/
   "payCreateAndListAllDto": {
     "description": "Cartão de Débito"
   },
-  "priceTotal": 350,00,
+  "priceTotal": 350.00,
   "purchaseDate": "2021-08-02T15:11:00.142Z",
   "quantityPaymentInstallments": 0,
   "valueType": "VARIABLE"
@@ -161,7 +161,7 @@ Exemplo de endereço com swagger: http://localhost:8080/swagger-ui.html#/
   "payCreateAndListAllDto": {
     "description": "Cartão de Débito"
   },
-  "priceTotal": 350,00,
+  "priceTotal": 350.00,
   "purchaseDate": "2021-08-02T15:11:00.142Z",
   "quantityPaymentInstallments": 0,
   "valueType": "VARIABLE"
