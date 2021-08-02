@@ -1,4 +1,4 @@
-# Personal bill controll, Spring framework, MySQL, MaspStruct, Swagger
+# Controle de contas pessoal
 *Esse projeto é uma Api de controle de conta pessoal, que utiliza linguagem Java, Framework spring, mapstruct como conversor de dtos, swagger, arquitetura Rest e também consumo de microservices de usuário. O objetivo do projeto e criar um controle de contas, onde o usuário se registra no sistema e pode então lançar suas despensas, definindo, tipo de conta, categorias e meios de pagamento, desse modo, este projeto me proporcionou a aprender a consumir microservices, relacionamentos avançados, mapear dtos, git flow e boas práticas.*
 
 ## Tecnologias usadas
